@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pizza — Bella Massa</title>
+  <meta name="description" content="Veja os ingredientes da pizza e peça pelo WhatsApp na Bella Massa.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="index.html">Bella <span>Massa</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html#cardapio">Cardápio</a>
+      <a class="nav-link" href="sobre.html">Sobre</a>
+      <a class="nav-link" href="contato.html">Contato</a>
+    </div>
+  </nav>
+
+  <main id="pizza" class="pizza-page">
+    <noscript>
+      <p class="aviso">Para ver esta pizza, ative o JavaScript do navegador. Ou peça direto pelo
+        <a href="https://wa.me/5511999990000">WhatsApp</a>.</p>
+    </noscript>
+  </main>
+
+  <footer>© Bella Massa — Massa fresca todos os dias</footer>
+
+  <script src="pizzas.js"></script>
+  <script>
+    var main = document.getElementById("pizza");
+    var id = new URLSearchParams(location.search).get("id");
+    var pizza = id ? obterPizza(id) : undefined;
+
+    function el(tag, className, text) {
+      var e = document.createElement(tag);
+      if (className) e.className = className;
+      if (text !== undefined) e.textContent = text;
+      return e;
+    }
+
+    function voltar() {
+      var a = el("a", "voltar", "← Cardápio");
+      a.href = "index.html#cardapio";
+      return a;
+    }
+
+    if (!pizza) {
+      main.appendChild(voltar());
+      main.appendChild(el("h1", "", "Não encontramos essa pizza."));
+      var link = el("a", "btn", "Ver o cardápio");
+      link.href = "index.html#cardapio";
+      main.appendChild(link);
+    } else {
+      document.title = pizza.nome + " — Bella Massa";
+      main.appendChild(voltar());
+
+      if (pizza.imagem) {
+        var img = el("img", "pizza-foto");
+        img.src = pizza.imagem;
+        img.alt = "Pizza " + pizza.nome;
+        main.appendChild(img);
+      } else {
+        var fig = el("figure", "photo-placeholder");
+        fig.setAttribute("role", "img");
+        fig.setAttribute("aria-label", "Foto da pizza " + pizza.nome + " em breve");
+        fig.innerHTML =
+          '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="14.5" cy="9" r="1"/><circle cx="12" cy="15" r="1"/></svg>';
+        fig.appendChild(el("figcaption", "", "Foto em breve"));
+        main.appendChild(fig);
+      }
+
+      var topo = el("div", "pizza-topo");
+      topo.appendChild(el("h1", "", pizza.nome));
+      topo.appendChild(el("span", "price", formatarPreco(pizza.preco)));
+      main.appendChild(topo);
+
+      main.appendChild(el("h2", "pizza-sub", "Ingredientes"));
+      var lista = el("ul", "ingredientes");
+      pizza.ingredientes.forEach(function (i) { lista.appendChild(el("li", "", i)); });
+      main.appendChild(lista);
+
+      var combina = el("p", "combina");
+      combina.appendChild(el("strong", "", "Combina com: "));
+      combina.appendChild(document.createTextNode(pizza.acompanhamento));
+      main.appendChild(combina);
+
+      var pedir = el("a", "btn btn-big", "Pedir esta pizza no WhatsApp");
+      pedir.href = linkPedido(pizza);
+      main.appendChild(pedir);
+    }
+  </script>
+</body>
+</html>

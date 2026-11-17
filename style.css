@@ -235,6 +235,24 @@ footer {
   .menu { grid-template-columns: repeat(3, 1fr); }
 }
 
+.pizza-page { max-width: 640px; padding-top: 1.25rem; padding-bottom: 3rem; }
+.pizza-page .photo-placeholder, .pizza-foto { margin-bottom: 1.5rem; }
+.pizza-foto { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px; }
+.voltar { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); text-decoration: none; font-weight: 600; }
+.voltar:hover { color: var(--accent); }
+.pizza-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.pizza-topo h1 { font-size: clamp(1.8rem, 8vw, 2.6rem); margin: 0; }
+.pizza-topo .price { font-size: 1.3rem; }
+.pizza-sub { text-align: left; font-size: 1.1rem; margin: 1.5rem 0 0.75rem; }
+.pizza-sub::after { display: none; }
+.ingredientes { list-style: none; display: grid; gap: 0.5rem; }
+.ingredientes li { padding-left: 1.4rem; position: relative; }
+.ingredientes li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.combina { margin: 1.5rem 0; padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--muted); }
+.combina strong { color: var(--text); }
+.aviso { padding: 1.5rem 0; color: var(--muted); }
+.aviso a { color: var(--accent); }
+
 @media (max-width: 420px) {
   .topbar { padding-left: 1rem; padding-right: 1rem; }
   .brand { font-size: 1rem; white-space: nowrap; }
