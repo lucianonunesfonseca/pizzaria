@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bella Massa — Massa fresca todos os dias</title>
+  <meta name="description" content="Pizzaria Bella Massa. Massa fresca todos os dias. Confira o cardápio e peça pelo WhatsApp.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="#">Bella <span>Massa</span></a>
+    <a class="nav-link" href="#cardapio">Cardápio</a>
+  </nav>
+
+  <header class="hero">
+    <p class="eyebrow">Pizzaria</p>
+    <h1>Bella <span>Massa</span></h1>
+    <p class="slogan">Massa fresca todos os dias</p>
+    <a class="btn" href="https://wa.me/5511999990000?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido." target="_blank" rel="noopener">Pedir no WhatsApp</a>
+  </header>
+
+  <main>
+    <section id="cardapio">
+      <h2>Cardápio</h2>
+      <div class="menu">
+        <article class="card">
+          <div class="card-top"><h3>Margherita</h3><span class="price">R$ 42,00</span></div>
+          <p>Molho de tomate, mussarela, tomate fresco e manjericão.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Calabresa</h3><span class="price">R$ 46,00</span></div>
+          <p>Mussarela, calabresa artesanal, cebola roxa e orégano.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Quatro Queijos</h3><span class="price">R$ 54,00</span></div>
+          <p>Mussarela, provolone, gorgonzola e parmesão.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Portuguesa</h3><span class="price">R$ 52,00</span></div>
+          <p>Presunto, ovos, cebola, azeitonas, ervilha e mussarela.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Frango com Catupiry</h3><span class="price">R$ 50,00</span></div>
+          <p>Frango desfiado temperado, catupiry cremoso e milho.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Pepperoni</h3><span class="price">R$ 56,00</span></div>
+          <p>Mussarela, fatias generosas de pepperoni e mel picante.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="horarios" class="hours">
+      <h2>Horário de funcionamento</h2>
+      <ul>
+        <li><span>Terça a quinta</span><strong>18h às 23h</strong></li>
+        <li><span>Sexta e sábado</span><strong>18h às 00h</strong></li>
+        <li><span>Domingo</span><strong>17h às 23h</strong></li>
+        <li><span>Segunda</span><strong>Fechado</strong></li>
+      </ul>
+    </section>
+
+    <section id="reserva">
+      <h2>Reserve sua mesa</h2>
+      <form id="form-reserva" class="form">
+        <label>Nome
+          <input type="text" name="nome" required autocomplete="name">
+        </label>
+        <label>Telefone
+          <input type="tel" name="telefone" required autocomplete="tel" placeholder="(11) 99999-0000">
+        </label>
+        <label>Número de pessoas
+          <input type="number" name="pessoas" required min="1" max="20" value="2">
+        </label>
+        <label>Data
+          <input type="date" name="data" required>
+        </label>
+        <button type="submit" class="btn">Reservar pelo WhatsApp</button>
+      </form>
+    </section>
+
+    <section class="cta">
+      <h2>Bateu a fome?</h2>
+      <a class="btn btn-big" href="https://wa.me/5511999990000?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido." target="_blank" rel="noopener">Pedir no WhatsApp</a>
+      <p class="phone">(11) 99999-0000</p>
+    </section>
+  </main>
+
+  <footer>© Bella Massa — Massa fresca todos os dias</footer>
+
+  <script>
+    var form = document.getElementById("form-reserva");
+    var dataInput = form.elements["data"];
+    dataInput.min = new Date().toISOString().split("T")[0];
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = dataInput.value.split("-");
+      var mensagem =
+        "Olá! Gostaria de reservar uma mesa na Bella Massa.\n" +
+        "Nome: " + form.elements["nome"].value + "\n" +
+        "Telefone: " + form.elements["telefone"].value + "\n" +
+        "Pessoas: " + form.elements["pessoas"].value + "\n" +
+        "Data: " + d[2] + "/" + d[1] + "/" + d[0];
+      window.open("https://wa.me/5511999990000?text=" + encodeURIComponent(mensagem), "_blank", "noopener");
+    });
+  </script>
+</body>
+</html>
