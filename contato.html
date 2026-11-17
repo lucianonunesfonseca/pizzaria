@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contato — Bella Massa</title>
+  <meta name="description" content="Fale com a pizzaria Bella Massa. Envie sua mensagem pelo WhatsApp.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="index.html">Bella <span>Massa</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html#cardapio">Cardápio</a>
+      <a class="nav-link" href="sobre.html">Sobre</a>
+      <a class="nav-link" href="contato.html" aria-current="page">Contato</a>
+    </div>
+  </nav>
+
+  <header class="hero hero-small">
+    <h1>Fale <span>conosco</span></h1>
+    <p class="slogan">Dúvidas, elogios ou encomendas? Escreva abaixo.</p>
+  </header>
+
+  <main>
+    <section id="contato">
+      <form id="form-contato" class="form">
+        <label>Nome
+          <input type="text" name="nome" required autocomplete="name">
+        </label>
+        <label>E-mail
+          <input type="email" name="email" required autocomplete="email" placeholder="voce@exemplo.com">
+        </label>
+        <label>Mensagem
+          <textarea name="mensagem" rows="5" required></textarea>
+        </label>
+        <button type="submit" class="btn">Enviar pelo WhatsApp</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>© Bella Massa — Massa fresca todos os dias</footer>
+
+  <script>
+    var form = document.getElementById("form-contato");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var mensagem =
+        "Olá! Meu nome é " + form.elements["nome"].value.trim() + ".\n" +
+        "E-mail: " + form.elements["email"].value.trim() + "\n\n" +
+        form.elements["mensagem"].value.trim();
+      window.location.href = "https://wa.me/5511999990000?text=" + encodeURIComponent(mensagem);
+    });
+  </script>
+</body>
+</html>
