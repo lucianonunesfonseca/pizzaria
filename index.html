@@ -27,32 +27,11 @@
   <main>
     <section id="cardapio">
       <h2>Cardápio</h2>
-      <div class="menu">
-        <article class="card">
-          <div class="card-top"><h3>Margherita</h3><span class="price">R$ 42,00</span></div>
-          <p>Molho de tomate, mussarela, tomate fresco e manjericão.</p>
-        </article>
-        <article class="card">
-          <div class="card-top"><h3>Calabresa</h3><span class="price">R$ 46,00</span></div>
-          <p>Mussarela, calabresa artesanal, cebola roxa e orégano.</p>
-        </article>
-        <article class="card">
-          <div class="card-top"><h3>Quatro Queijos</h3><span class="price">R$ 54,00</span></div>
-          <p>Mussarela, provolone, gorgonzola e parmesão.</p>
-        </article>
-        <article class="card">
-          <div class="card-top"><h3>Portuguesa</h3><span class="price">R$ 52,00</span></div>
-          <p>Presunto, ovos, cebola, azeitonas, ervilha e mussarela.</p>
-        </article>
-        <article class="card">
-          <div class="card-top"><h3>Frango com Catupiry</h3><span class="price">R$ 50,00</span></div>
-          <p>Frango desfiado temperado, catupiry cremoso e milho.</p>
-        </article>
-        <article class="card">
-          <div class="card-top"><h3>Pepperoni</h3><span class="price">R$ 56,00</span></div>
-          <p>Mussarela, fatias generosas de pepperoni e mel picante.</p>
-        </article>
-      </div>
+      <div class="menu" id="menu"></div>
+      <noscript>
+        <p class="aviso">Para ver o cardápio, ative o JavaScript do navegador. Ou peça direto pelo
+          <a href="https://wa.me/5511999990000">WhatsApp</a>.</p>
+      </noscript>
     </section>
 
     <section id="horarios" class="hours">
@@ -93,7 +72,32 @@
 
   <footer>© Bella Massa — Massa fresca todos os dias</footer>
 
+  <script src="pizzas.js"></script>
   <script>
+    var menu = document.getElementById("menu");
+    PIZZAS.forEach(function (pizza) {
+      var card = document.createElement("a");
+      card.className = "card";
+      card.href = "pizza.html?id=" + encodeURIComponent(pizza.id);
+
+      var topo = document.createElement("div");
+      topo.className = "card-top";
+      var nome = document.createElement("h3");
+      nome.textContent = pizza.nome;
+      var preco = document.createElement("span");
+      preco.className = "price";
+      preco.textContent = formatarPreco(pizza.preco);
+      topo.appendChild(nome);
+      topo.appendChild(preco);
+
+      var ingredientes = document.createElement("p");
+      ingredientes.textContent = pizza.ingredientes.join(", ") + ".";
+
+      card.appendChild(topo);
+      card.appendChild(ingredientes);
+      menu.appendChild(card);
+    });
+
     var form = document.getElementById("form-reserva");
     var dataInput = form.elements["data"];
     dataInput.min = new Date().toISOString().split("T")[0];
