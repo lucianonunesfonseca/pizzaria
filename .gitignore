@@ -15,3 +15,6 @@ node_modules/
 
 # Claude Code (configurações locais)
 .claude/
+
+# Fotos originais pesadas (PNG); o site usa as versões otimizadas de images/
+imagens-originais/

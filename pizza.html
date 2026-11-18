@@ -72,6 +72,7 @@
         var img = el("img", "pizza-foto");
         img.src = pizza.imagem;
         img.alt = "Pizza " + pizza.nome;
+        img.decoding = "async";
         img.addEventListener("error", function () { img.replaceWith(reserva()); });
         main.appendChild(img);
       } else {

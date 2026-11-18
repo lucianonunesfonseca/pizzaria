@@ -33,8 +33,8 @@ html { scroll-behavior: smooth; }
   border-bottom: 1px solid var(--border);
 }
 .brand {
-  display: inline-flex;
-  align-items: center;
+  display: inline-block;
+  line-height: 44px;
   min-height: 44px;
   color: var(--text);
   text-decoration: none;
@@ -179,8 +179,8 @@ a.card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .card p { color: var(--muted); font-size: 0.95rem; }
 
 .item:hover { border-color: var(--border); transform: none; }
-.item-foto { margin: 0 0 1rem; aspect-ratio: 16 / 9; width: 100%; border-radius: 12px; }
-img.item-foto { display: block; object-fit: cover; }
+.item-foto { margin: 0 0 1rem; aspect-ratio: 1 / 1; width: 100%; border-radius: 12px; }
+img.item-foto { display: block; object-fit: contain; }
 .item .photo-placeholder { max-width: none; }
 
 .hours ul {
@@ -270,8 +270,9 @@ footer {
 }
 
 .pizza-page { max-width: 640px; padding-top: 1.25rem; padding-bottom: 3rem; }
-.pizza-page .photo-placeholder, .pizza-foto { margin-bottom: 1.5rem; }
-.pizza-foto { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px; }
+.pizza-page .photo-placeholder, .pizza-foto { margin: 0 auto 1.5rem; max-width: 520px; }
+.pizza-page .photo-placeholder { aspect-ratio: 1 / 1; }
+.pizza-foto { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: contain; }
 .voltar { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); text-decoration: none; font-weight: 600; }
 .voltar:hover { color: var(--accent); }
 .pizza-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }

@@ -1,10 +1,11 @@
 // Fonte única dos dados do cardápio. Edite preços, ingredientes, fotos e
-// acompanhamentos aqui. Para usar uma foto, coloque o arquivo na pasta do
-// site e escreva o nome em "imagem" (ex.: "margherita.jpg").
+// acompanhamentos aqui. Para usar uma foto, coloque o arquivo em images/ e
+// escreva o caminho em "imagem" (ex.: "images/01-margherita.webp").
 // "precos" são os valores de cada tamanho (P, M, G), editáveis um a um.
 // O cardápio mostra "a partir de" + o menor desses valores.
 // No cardápio os ingredientes viram frase corrida ("a, b e c") com minúscula depois do
 // primeiro: evite nomes próprios nessa lista (na página da pizza ficam como escritos).
+// "acompanhamento" deve ser o nome de um item de bebidas.js.
 var ACRESCIMO_BORDA = 8; // R$ a mais em qualquer tamanho, com borda
 var TAMANHOS = ["P", "M", "G"];
 var PIZZAS = [
@@ -12,49 +13,49 @@ var PIZZAS = [
     id: "margherita",
     nome: "Margherita",
     precos: { P: 42, M: 54.6, G: 81.9 },
-    ingredientes: ["Molho de tomate", "Mussarela", "Tomate fresco", "Manjericão"],
-    imagem: "",
+    ingredientes: ["Molho de tomate", "Mussarela", "Manjericão fresco"],
+    imagem: "images/01-margherita.webp",
     acompanhamento: "Suco de laranja natural"
-  },
-  {
-    id: "calabresa",
-    nome: "Calabresa",
-    precos: { P: 46, M: 59.8, G: 89.7 },
-    ingredientes: ["Mussarela", "Calabresa artesanal", "Cebola roxa", "Orégano"],
-    imagem: "",
-    acompanhamento: "Guaraná gelado"
-  },
-  {
-    id: "quatro-queijos",
-    nome: "Quatro Queijos",
-    precos: { P: 54, M: 70.2, G: 105.3 },
-    ingredientes: ["Mussarela", "Provolone", "Gorgonzola", "Parmesão"],
-    imagem: "",
-    acompanhamento: "Vinho tinto suave"
-  },
-  {
-    id: "portuguesa",
-    nome: "Portuguesa",
-    precos: { P: 52, M: 67.6, G: 101.4 },
-    ingredientes: ["Presunto", "Ovos", "Cebola", "Azeitonas", "Ervilha", "Mussarela"],
-    imagem: "",
-    acompanhamento: "Suco de limão com hortelã"
-  },
-  {
-    id: "frango-catupiry",
-    nome: "Frango com Catupiry",
-    precos: { P: 50, M: 65, G: 97.5 },
-    ingredientes: ["Frango desfiado temperado", "Catupiry cremoso", "Milho"],
-    imagem: "",
-    acompanhamento: "Refrigerante de limão"
   },
   {
     id: "pepperoni",
     nome: "Pepperoni",
     precos: { P: 56, M: 72.8, G: 109.2 },
-    ingredientes: ["Mussarela", "Fatias generosas de pepperoni", "Mel picante"],
-    imagem: "",
+    ingredientes: ["Molho de tomate", "Mussarela", "Pepperoni"],
+    imagem: "images/02-pepperoni.webp",
     acompanhamento: "Cerveja artesanal"
+  },
+  {
+    id: "quatro-queijos",
+    nome: "Quatro Queijos",
+    precos: { P: 54, M: 70.2, G: 105.3 },
+    ingredientes: ["Mussarela", "Gorgonzola", "Ricota", "Parmesão"],
+    imagem: "images/03-queijo-branco.webp",
+    acompanhamento: "Vinho tinto suave"
+  },
+  {
+    id: "cogumelos",
+    nome: "Cogumelos",
+    precos: { P: 52, M: 67.6, G: 101.4 },
+    ingredientes: ["Molho de tomate", "Mussarela", "Cogumelos frescos"],
+    imagem: "images/04-cogumelos.webp",
+    acompanhamento: "Guaraná"
+  },
+  {
+    id: "vegetariana",
+    nome: "Vegetariana",
+    precos: { P: 46, M: 59.8, G: 89.7 },
+    ingredientes: ["Molho de tomate", "Mussarela", "Pimentão", "Cebola roxa", "Azeitonas pretas", "Tomate"],
+    imagem: "images/05-vegetais.webp",
+    acompanhamento: "Suco de limão com hortelã"
+  },
+  {
+    id: "frango-barbecue",
+    nome: "Frango com Barbecue",
+    precos: { P: 50, M: 65, G: 97.5 },
+    ingredientes: ["Mussarela", "Frango grelhado", "Cebola roxa", "Molho barbecue"],
+    imagem: "images/06-frango.webp",
+    acompanhamento: "Refrigerante de limão"
   }
 ];
 

@@ -78,6 +78,8 @@
           img.className = "item-foto";
           img.src = item.imagem;
           img.alt = item.nome;
+          img.loading = "lazy";
+          img.decoding = "async";
           img.addEventListener("error", function () { img.replaceWith(reserva(item, icone)); });
           card.appendChild(img);
         } else {

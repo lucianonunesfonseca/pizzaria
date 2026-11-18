@@ -53,3 +53,8 @@ Nomes das classes CSS, detalhes visuais do card clicável, textos exatos dos avi
 - `sacola.js`: guarda linhas no `localStorage` (`bella-sacola`) sem preços; mesmo item soma a quantidade (1 a 20); linhas inválidas são descartadas; sem `localStorage` usa memória e a `sacola.html` avisa. Botão flutuante com contagem em todas as páginas (menos na sacola).
 - `sacola.html`: lista, quantidade (− e +), remover, total e "Enviar pedido pelo WhatsApp". Mensagem: "Olá! Quero fazer este pedido:" + uma linha por item ("2x Margherita (M, com borda) — R$ 125,20") + "Total: R$ ...".
 - Fora do escopo: nome, endereço, entrega/retirada (combinados na conversa do WhatsApp).
+
+## Atualização: fotos e cardápio (2026-11-17)
+- As 15 fotos fornecidas (PNG transparente, ~28 MB) viraram WebP com transparência em `images/` (<= 900 px, ~50-165 KB cada, ~1,8 MB no total); os PNGs ficam em `imagens-originais/` (ignorada pelo Git).
+- A caixa da foto (página da pizza e cards de bebidas) passou de 16:9 com corte (`cover`) para quadrada com a imagem inteira (`contain`); na página da pizza tem no máximo 520 px. A foto da equipe em `sobre.html` continua 16:9.
+- Cardápio ajustado às fotos, na ordem delas: Margherita, Pepperoni, Quatro Queijos, Cogumelos, Vegetariana e Frango com Barbecue. Os ingredientes descrevem o que aparece em cada foto; os preços ficaram nos mesmos valores das posições antigas (editáveis). Acompanhamentos devem ser nomes de itens de `bebidas.js`.
