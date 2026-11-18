@@ -240,6 +240,14 @@ button.btn { border: none; cursor: pointer; font-family: inherit; }
 .sacola-badge { position: absolute; top: -4px; right: -4px; display: grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 11px; background: var(--text); color: #1a0d00; font-size: 0.8rem; font-weight: 800; line-height: 1; }
 .sacola-badge[hidden] { display: none; }
 
+.aviso-envio { margin-bottom: 1rem; padding: 1rem 1.25rem; background: var(--surface); border: 2px solid var(--accent); border-radius: 16px; font-weight: 600; }
+.aviso-envio-botoes { display: grid; gap: 0.6rem; margin-top: 0.75rem; }
+.aviso-envio .btn, .btn-sec { min-height: 44px; padding: 0.7rem 1rem; font-size: 1rem; box-shadow: none; }
+.btn-sec { border: 2px solid var(--border); border-radius: 999px; background: none; color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+.btn-sec:hover { border-color: var(--accent); }
+.limpar { display: block; min-height: 44px; margin: 0.9rem auto 0; padding: 0 1rem; border: 2px solid var(--border); border-radius: 12px; background: none; color: var(--muted); font: inherit; cursor: pointer; }
+.limpar:hover { color: var(--accent); border-color: var(--accent); }
+
 .sacola-item { display: grid; gap: 0.75rem; margin-bottom: 0.75rem; padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
 .sacola-nome { font-size: 1.1rem; }
 .sacola-detalhe, .sacola-unit { color: var(--muted); font-size: 0.95rem; }

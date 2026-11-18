@@ -58,3 +58,7 @@ Nomes das classes CSS, detalhes visuais do card clicável, textos exatos dos avi
 - As 15 fotos fornecidas (PNG transparente, ~28 MB) viraram WebP com transparência em `images/` (<= 900 px, ~50-165 KB cada, ~1,8 MB no total); os PNGs ficam em `imagens-originais/` (ignorada pelo Git).
 - A caixa da foto (página da pizza e cards de bebidas) passou de 16:9 com corte (`cover`) para quadrada com a imagem inteira (`contain`); na página da pizza tem no máximo 520 px. A foto da equipe em `sobre.html` continua 16:9.
 - Cardápio ajustado às fotos, na ordem delas: Margherita, Pepperoni, Quatro Queijos, Cogumelos, Vegetariana e Frango com Barbecue. Os ingredientes descrevem o que aparece em cada foto; os preços ficaram nos mesmos valores das posições antigas (editáveis). Acompanhamentos devem ser nomes de itens de `bebidas.js`.
+
+## Atualização: favicon e limpeza da sacola (2026-11-18)
+- Favicon: `favicon.svg` (fatia de pizza laranja sobre fundo escuro), `favicon-32.png` e `apple-touch-icon.png` (180 px, sem cantos arredondados, o iOS arredonda sozinho), ligados no `<head>` das 6 páginas.
+- Depois de enviar o pedido a sacola não esvazia sozinha (se o WhatsApp não abrir o cliente perderia tudo). Ao tocar em "Enviar", a `sacola.html` marca o envio na aba (`sessionStorage`); ao voltar (carregar a página, `pageshow` ou `visibilitychange`), pergunta "Você enviou o pedido pelo WhatsApp?" com "Sim, limpar a sacola" / "Não, manter os itens". Existe também o botão "Limpar sacola". Sacola vazia apaga a marca; `sessionStorage` bloqueado não quebra nada.

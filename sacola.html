@@ -6,6 +6,9 @@
   <title>Minha sacola — Bella Massa</title>
   <meta name="description" content="Confira os itens da sua sacola e envie o pedido pelo WhatsApp.">
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
   <nav class="topbar">
@@ -64,13 +67,40 @@
       if (mantidas.length !== linhas.length) salvarSacola(mantidas);
     }
 
+    var textoVazia = "Sua sacola está vazia.";
+
+    function montarPergunta() {
+      var caixa = el("div", "aviso-envio");
+      caixa.id = "pedido-enviado";
+      caixa.setAttribute("role", "status");
+      caixa.appendChild(el("p", "", "Você enviou o pedido pelo WhatsApp?"));
+      var linha = el("div", "aviso-envio-botoes");
+      var sim = el("button", "btn", "Sim, limpar a sacola");
+      sim.id = "limpar-sim";
+      sim.type = "button";
+      sim.addEventListener("click", function () {
+        limparSacola();
+        textoVazia = "Pedido enviado! Sua sacola está vazia.";
+        render();
+      });
+      var nao = el("button", "btn-sec", "Não, manter os itens");
+      nao.id = "limpar-nao";
+      nao.type = "button";
+      nao.addEventListener("click", function () { limparMarcaEnvio(); render(); });
+      linha.appendChild(sim);
+      linha.appendChild(nao);
+      caixa.appendChild(linha);
+      return caixa;
+    }
+
     function render() {
       var itens = itensDaSacola();
       podarSacola(itens);
       conteudo.textContent = "";
 
       if (itens.length === 0) {
-        var vazia = el("p", "aviso", "Sua sacola está vazia.");
+        limparMarcaEnvio(); // sacola vazia: não há o que perguntar
+        var vazia = el("p", "aviso", textoVazia);
         vazia.id = "sacola-vazia";
         conteudo.appendChild(vazia);
         var ver = el("a", "btn", "Ver o cardápio");
@@ -78,6 +108,9 @@
         conteudo.appendChild(ver);
         return;
       }
+
+      textoVazia = "Sua sacola está vazia.";
+      if (pedidoFoiEnviado()) conteudo.appendChild(montarPergunta());
 
       itens.forEach(function (item) {
         var linha = el("article", "sacola-item");
@@ -116,8 +149,22 @@
       var enviar = el("a", "btn btn-big", "Enviar pedido pelo WhatsApp");
       enviar.id = "enviar";
       enviar.href = linkPedidoSacola();
+      enviar.addEventListener("click", marcarPedidoEnviado);
       conteudo.appendChild(enviar);
+
+      var limpar = el("button", "limpar", "Limpar sacola");
+      limpar.id = "limpar";
+      limpar.type = "button";
+      limpar.addEventListener("click", function () { limparSacola(); render(); });
+      conteudo.appendChild(limpar);
     }
+
+    // Ao voltar do WhatsApp (a aba reaparece), pergunta se pode limpar a sacola.
+    function revisarEnvio() {
+      if (pedidoFoiEnviado() && !document.getElementById("pedido-enviado")) render();
+    }
+    window.addEventListener("pageshow", revisarEnvio);
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) revisarEnvio(); });
 
     render();
   </script>

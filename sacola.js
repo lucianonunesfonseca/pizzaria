@@ -115,7 +115,24 @@ function removerDaSacola(chave) {
 
 function limparSacola() {
   salvarSacola([]);
+  limparMarcaEnvio();
   atualizarBotaoSacola();
+}
+
+// Marca, só nesta aba, que o cliente tocou em "Enviar pedido". Quando ele volta do
+// WhatsApp, a sacola.html pergunta se pode limpar a sacola.
+var CHAVE_ENVIO = "bella-enviado";
+
+function marcarPedidoEnviado() {
+  try { window.sessionStorage.setItem(CHAVE_ENVIO, "1"); } catch (e) {}
+}
+
+function pedidoFoiEnviado() {
+  try { return window.sessionStorage.getItem(CHAVE_ENVIO) === "1"; } catch (e) { return false; }
+}
+
+function limparMarcaEnvio() {
+  try { window.sessionStorage.removeItem(CHAVE_ENVIO); } catch (e) {}
 }
 
 // Transforma uma linha em { chave, nome, detalhe, unit, qtd, subtotal };

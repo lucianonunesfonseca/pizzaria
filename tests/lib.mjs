@@ -57,7 +57,7 @@ export async function launch(width = 375) {
   await send('Emulation.setDeviceMetricsOverride', { width, height: 812, deviceScaleFactor: 2, mobile: true });
 
   const ev = async ex => {
-    const r = await send('Runtime.evaluate', { expression: ex, returnByValue: true });
+    const r = await send('Runtime.evaluate', { expression: ex, returnByValue: true, awaitPromise: true });
     return r.exceptionDetails ? ('ERR ' + r.exceptionDetails.exception.description) : r.result.value;
   };
   const open = async url => { await send('Page.navigate', { url }); await wait(900); };
