@@ -1,6 +1,7 @@
 // Sacola de pedidos: guarda as linhas no navegador (localStorage), calcula o
 // total e monta a mensagem do WhatsApp. Os preços não ficam guardados: são
-// calculados na hora a partir de pizzas.js e bebidas.js.
+// calculados na hora a partir de pizzas.js e bebidas.js, que toda página com
+// este script precisa carregar antes (itens que saíram do cardápio são ignorados).
 //
 // Uma linha da sacola é:
 //   pizza:               { tipo: "pizza", id, tamanho: "P"|"M"|"G", borda: bool, qtd }
@@ -35,6 +36,16 @@ function linhaValida(l) {
   return true;
 }
 
+// false se o item saiu do cardápio (os dados precisam estar carregados na página).
+function itemExiste(l) {
+  if (l.tipo === "pizza") {
+    var p = obterPizza(l.id);
+    return !!p && typeof p.precos[l.tamanho] === "number";
+  }
+  var lista = l.tipo === "bebida" ? BEBIDAS : SOBREMESAS;
+  return lista.some(function (i) { return i.id === l.id; });
+}
+
 function chaveLinha(l) {
   return l.tipo === "pizza"
     ? ["pizza", l.id, l.tamanho, l.borda ? "com" : "sem"].join("|")
@@ -53,7 +64,7 @@ function lerSacola() {
     }
   }
   if (!Array.isArray(bruto)) return [];
-  return bruto.filter(linhaValida).map(function (l) {
+  return bruto.filter(linhaValida).filter(itemExiste).map(function (l) {
     l.qtd = Math.min(Math.floor(l.qtd), QTD_MAX);
     return l;
   });

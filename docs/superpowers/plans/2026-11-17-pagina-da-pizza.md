@@ -14,7 +14,7 @@
 
 - Idioma do site e das mensagens: pt-BR.
 - Cores só pelos tokens de `:root` em `style.css` (`--bg #0f0f11`, `--accent #ff7a1a`); nunca valores soltos.
-- WhatsApp: número `5511999990000`; mensagem do pedido `Olá! Quero pedir a pizza <nome> (R$ <preço>).`, aberta na **mesma aba** (`<a href>` sem `target`; nunca `window.open`).
+- WhatsApp: número `5562998452828`; mensagem do pedido `Olá! Quero pedir a pizza <nome> (R$ <preço>).`, aberta na **mesma aba** (`<a href>` sem `target`; nunca `window.open`).
 - Nada do cardápio atual pode se perder: 6 pizzas com os mesmos nomes, ingredientes e preços.
 - Sem rolagem horizontal a 375 px e 320 px; alvos de toque com no mínimo 44 px.
 - Dados de usuário (parâmetro `id`) nunca entram como HTML: usar `textContent`.
@@ -42,13 +42,13 @@
   - `PIZZAS: Array<{id: string, nome: string, preco: number, ingredientes: string[], imagem: string, acompanhamento: string}>`
   - `obterPizza(id: string): object | undefined`
   - `formatarPreco(valor: number): string` → `"R$ 42,00"`
-  - `linkPedido(pizza: object): string` → URL `https://wa.me/5511999990000?text=...`
+  - `linkPedido(pizza: object): string` → URL `https://wa.me/5562998452828?text=...`
 
 - [ ] **Step 1: Criar `pizzas.js`** com as 6 pizzas. `id` em minúsculas sem acento: `margherita`, `calabresa`, `quatro-queijos`, `portuguesa`, `frango-catupiry`, `pepperoni`. Preços 42, 46, 54, 52, 50, 56. Ingredientes quebrados do texto atual do `index.html` (ex.: Margherita = molho de tomate, mussarela, tomate fresco, manjericão). `imagem: ""` em todas. Um `acompanhamento` inventado por pizza (ex.: Suco de laranja natural, Guaraná, Vinho tinto, Suco de limão, Refrigerante de limão, Cerveja artesanal).
 - [ ] **Step 2: Criar as três funções** no mesmo arquivo. `formatarPreco` usa `toLocaleString("pt-BR", {style:"currency", currency:"BRL"})`; atenção ao espaço não separável que o `toLocaleString` gera entre `R$` e o número: trocar por espaço comum para o texto bater com `R$ 42,00`. `linkPedido` usa `encodeURIComponent` na mensagem da Global Constraints.
-- [ ] **Step 3: Criar `pizza.html`** com o mesmo `<head>`, `topbar` (Cardápio → `index.html#cardapio`, Sobre, Contato; nenhum `aria-current`) e rodapé das outras páginas. Corpo: `<main id="pizza">` vazio, `<noscript>` com aviso e link para `https://wa.me/5511999990000`, e um `<script>` que carrega `pizzas.js`, lê `new URLSearchParams(location.search).get("id")`, chama `obterPizza` e preenche: foto (`<img>` só se `imagem` não for vazio; senão `<figure class="photo-placeholder">` com ícone), `<h1>` nome, preço, `<ul>` de ingredientes, "Combina com: <acompanhamento>" e `<a class="btn btn-big" href=linkPedido(p)>Pedir esta pizza no WhatsApp</a>`. Atualiza `document.title` para `"<nome> — Bella Massa"`. Sem pizza: mensagem "Não encontramos essa pizza." e link "Ver o cardápio" para `index.html#cardapio`. Tudo via `textContent`/`createElement`.
+- [ ] **Step 3: Criar `pizza.html`** com o mesmo `<head>`, `topbar` (Cardápio → `index.html#cardapio`, Sobre, Contato; nenhum `aria-current`) e rodapé das outras páginas. Corpo: `<main id="pizza">` vazio, `<noscript>` com aviso e link para `https://wa.me/5562998452828`, e um `<script>` que carrega `pizzas.js`, lê `new URLSearchParams(location.search).get("id")`, chama `obterPizza` e preenche: foto (`<img>` só se `imagem` não for vazio; senão `<figure class="photo-placeholder">` com ícone), `<h1>` nome, preço, `<ul>` de ingredientes, "Combina com: <acompanhamento>" e `<a class="btn btn-big" href=linkPedido(p)>Pedir esta pizza no WhatsApp</a>`. Atualiza `document.title` para `"<nome> — Bella Massa"`. Sem pizza: mensagem "Não encontramos essa pizza." e link "Ver o cardápio" para `index.html#cardapio`. Tudo via `textContent`/`createElement`.
 - [ ] **Step 4: Estilos** em `style.css` reaproveitando `.photo-placeholder`, `.btn-big`, `.price`: classes novas só para o bloco do detalhe (nome/preço na mesma linha, lista de ingredientes com marcadores na cor de destaque, "Combina com" como linha secundária, link "← Cardápio" no topo).
-- [ ] **Step 5: Verificar** abrindo `pizza.html?id=margherita` e `?id=pepperoni`. Esperado: título certo, ingredientes em lista, preço `R$ 42,00`, `href` do botão decodificado = `https://wa.me/5511999990000?text=Olá! Quero pedir a pizza Margherita (R$ 42,00).`. Cobrir Review Focus 1, 2 e 3: sem `id` → aviso; `?id=<img src=x onerror=alert(1)>` → nenhuma `<img>` criada pelo parâmetro e nenhum diálogo; `imagem` vazia → placeholder visível.
+- [ ] **Step 5: Verificar** abrindo `pizza.html?id=margherita` e `?id=pepperoni`. Esperado: título certo, ingredientes em lista, preço `R$ 42,00`, `href` do botão decodificado = `https://wa.me/5562998452828?text=Olá! Quero pedir a pizza Margherita (R$ 42,00).`. Cobrir Review Focus 1, 2 e 3: sem `id` → aviso; `?id=<img src=x onerror=alert(1)>` → nenhuma `<img>` criada pelo parâmetro e nenhum diálogo; `imagem` vazia → placeholder visível.
 - [ ] **Step 6: Commit** `git add pizzas.js pizza.html style.css` → `git commit -m "página da pizza com pedido pelo WhatsApp"`.
 
 ### Task 2: Cardápio gerado e clicável
@@ -61,7 +61,7 @@
 - Consumes: `PIZZAS`, `formatarPreco` (Task 1).
 - Produces: cada card é `<a class="card" href="pizza.html?id=<id>">` contendo nome, preço e uma linha de ingredientes (`ingredientes.join(", ")` + ponto final), com o mesmo visual de hoje.
 
-- [ ] **Step 1: Substituir os 6 cards fixos** por `<div class="menu" id="menu"></div>` + `<noscript>` com aviso e link para `https://wa.me/5511999990000`; carregar `pizzas.js` antes do script inline e gerar os cards com `createElement`/`textContent`.
+- [ ] **Step 1: Substituir os 6 cards fixos** por `<div class="menu" id="menu"></div>` + `<noscript>` com aviso e link para `https://wa.me/5562998452828`; carregar `pizzas.js` antes do script inline e gerar os cards com `createElement`/`textContent`.
 - [ ] **Step 2: Estilo do card como link:** `a.card` sem sublinhado, herdando cor, `display: block`, foco visível (`:focus-visible` com a cor de destaque), mesmo hover atual. Manter o script das reservas funcionando (não mexer nele).
 - [ ] **Step 3: Verificar** em `index.html`: 6 cards, nomes e preços idênticos aos atuais (42,00 / 46,00 / 54,00 / 52,00 / 50,00 / 56,00), tocar em cada um leva a `pizza.html?id=<id>` com a pizza correta. Cobrir Review Focus 5 com JavaScript desativado: aviso aparece.
 - [ ] **Step 4: Commit** `git add index.html style.css` → `git commit -m "cardápio gerado a partir da lista de pizzas"`.
