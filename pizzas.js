@@ -3,6 +3,8 @@
 // site e escreva o nome em "imagem" (ex.: "margherita.jpg").
 // "precos" são os valores de cada tamanho (P, M, G), editáveis um a um.
 // O cardápio mostra "a partir de" + o menor desses valores.
+// No cardápio os ingredientes viram frase corrida ("a, b e c") com minúscula depois do
+// primeiro: evite nomes próprios nessa lista (na página da pizza ficam como escritos).
 var ACRESCIMO_BORDA = 8; // R$ a mais em qualquer tamanho, com borda
 var TAMANHOS = ["P", "M", "G"];
 var PIZZAS = [
@@ -55,6 +57,12 @@ var PIZZAS = [
     acompanhamento: "Cerveja artesanal"
   }
 ];
+
+// ["a", "b", "c"] -> "a, b e c"
+function listaComE(itens) {
+  if (itens.length <= 1) return itens.join("");
+  return itens.slice(0, -1).join(", ") + " e " + itens[itens.length - 1];
+}
 
 function obterPizza(id) {
   return PIZZAS.find(function (p) { return p.id === id; });

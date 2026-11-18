@@ -57,12 +57,7 @@
       document.title = pizza.nome + " — Bella Massa";
       main.appendChild(voltar());
 
-      if (pizza.imagem) {
-        var img = el("img", "pizza-foto");
-        img.src = pizza.imagem;
-        img.alt = "Pizza " + pizza.nome;
-        main.appendChild(img);
-      } else {
+      function reserva() {
         var fig = el("figure", "photo-placeholder");
         fig.setAttribute("role", "img");
         fig.setAttribute("aria-label", "Foto da pizza " + pizza.nome + " em breve");
@@ -70,7 +65,17 @@
           '<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
           '<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="14.5" cy="9" r="1"/><circle cx="12" cy="15" r="1"/></svg>';
         fig.appendChild(el("figcaption", "", "Foto em breve"));
-        main.appendChild(fig);
+        return fig;
+      }
+
+      if (pizza.imagem) {
+        var img = el("img", "pizza-foto");
+        img.src = pizza.imagem;
+        img.alt = "Pizza " + pizza.nome;
+        img.addEventListener("error", function () { img.replaceWith(reserva()); });
+        main.appendChild(img);
+      } else {
+        main.appendChild(reserva());
       }
 
       main.appendChild(el("h1", "", pizza.nome));
