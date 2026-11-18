@@ -165,6 +165,7 @@ a.card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
 .card-top {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
   gap: 1rem;
@@ -245,6 +246,18 @@ footer {
 .pizza-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
 .pizza-topo h1 { font-size: clamp(1.8rem, 8vw, 2.6rem); margin: 0; }
 .pizza-topo .price { font-size: 1.3rem; }
+.opcoes { border: 0; margin-top: 1.5rem; }
+.opcoes legend { font-weight: 700; margin-bottom: 0.6rem; padding: 0; }
+.opcoes-linha { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.opcao { position: relative; flex: 1 1 0; min-width: 6.5rem; cursor: pointer; }
+.opcao input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.opcao-texto { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 56px; padding: 0.5rem 0.75rem; text-align: center; font-weight: 700; background: var(--surface); border: 2px solid var(--border); border-radius: 12px; transition: border-color 0.15s, background 0.15s; }
+.opcao-texto small { font-weight: 500; color: var(--muted); }
+.opcao input:checked + .opcao-texto { border-color: var(--accent); background: rgba(255, 122, 26, 0.12); }
+.opcao input:checked + .opcao-texto small { color: var(--accent); }
+.opcao input:focus-visible + .opcao-texto { outline: 3px solid var(--text); outline-offset: 2px; }
+.total-linha { display: flex; justify-content: space-between; align-items: baseline; margin: 1.5rem 0 1rem; font-size: 1.1rem; font-weight: 700; }
+.total-linha .price { font-size: 1.6rem; }
 .pizza-sub { text-align: left; font-size: 1.1rem; margin: 1.5rem 0 0.75rem; }
 .pizza-sub::after { display: none; }
 .ingredientes { list-style: none; display: grid; gap: 0.5rem; }

@@ -9,7 +9,7 @@ Cada pizza do cardápio vira um item clicável que leva a uma página própria (
 - Dados de cada pizza em um único lugar (`pizzas.js`), usados pelo cardápio e pela página.
 
 ## Não objetivos
-Carrinho com várias pizzas, tamanhos, bordas, pagamento. Cada pedido é de uma pizza; o resto se combina no WhatsApp.
+Carrinho com várias pizzas e pagamento. (Tamanhos e borda entraram depois, ver atualização no fim.) Cada pedido é de uma pizza; o resto se combina no WhatsApp.
 
 ## Anti-objetivos
 - Perder conteúdo do cardápio (nomes, ingredientes e preços atuais ficam idênticos).
@@ -40,3 +40,10 @@ Escolha do usuário: **B**.
 
 ## Fica para quem constrói
 Nomes das classes CSS, detalhes visuais do card clicável, textos exatos dos avisos, ícone do espaço reservado.
+
+## Atualização: tamanho e borda (2026-11-17)
+- Cada pizza tem `precos: { P, M, G }` escritos e editáveis um a um (valores iniciais: M = P + 30%, G = M + 50%, arredondados a centavos). Borda: `ACRESCIMO_BORDA = 8` (R$, igual para todas e todos os tamanhos).
+- Cardápio (`index.html`): cada card mostra só "a partir de R$ <menor preço>".
+- `pizza.html`: escolha de tamanho (P/M/G, com o preço de cada um) e de borda (sem / com, "+R$ 8,00") por botões de rádio estilizados (alvo >= 44 px, teclado ok); padrão P e sem borda; "Total" e o botão atualizam na hora.
+- Mensagem: "Olá! Quero pedir a pizza <nome>, tamanho <T>, <com|sem> borda (R$ <total>)."
+- Escolhido por mim: botões de rádio em vez de menu suspenso (toque no celular).

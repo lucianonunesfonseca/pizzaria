@@ -71,10 +71,39 @@
         main.appendChild(fig);
       }
 
-      var topo = el("div", "pizza-topo");
-      topo.appendChild(el("h1", "", pizza.nome));
-      topo.appendChild(el("span", "price", formatarPreco(pizza.preco)));
-      main.appendChild(topo);
+      main.appendChild(el("h1", "", pizza.nome));
+
+      function grupo(titulo, nome) {
+        var fs = el("fieldset", "opcoes");
+        fs.appendChild(el("legend", "", titulo));
+        var linha = el("div", "opcoes-linha");
+        fs.appendChild(linha);
+        main.appendChild(fs);
+        return {
+          add: function (valor, texto, extra, marcado) {
+            var label = el("label", "opcao");
+            var input = el("input");
+            input.type = "radio";
+            input.name = nome;
+            input.value = valor;
+            input.checked = marcado;
+            input.addEventListener("change", atualizar);
+            var span = el("span", "opcao-texto", texto);
+            if (extra) span.appendChild(el("small", "", extra));
+            label.appendChild(input);
+            label.appendChild(span);
+            linha.appendChild(label);
+          }
+        };
+      }
+
+      var tamanhos = grupo("Tamanho", "tamanho");
+      TAMANHOS.forEach(function (t, i) {
+        tamanhos.add(t, t, formatarPreco(pizza.precos[t]), i === 0);
+      });
+      var bordas = grupo("Borda", "borda");
+      bordas.add("sem", "Sem borda", "", true);
+      bordas.add("com", "Com borda", "+" + formatarPreco(ACRESCIMO_BORDA), false);
 
       main.appendChild(el("h2", "pizza-sub", "Ingredientes"));
       var lista = el("ul", "ingredientes");
@@ -86,9 +115,23 @@
       combina.appendChild(document.createTextNode(pizza.acompanhamento));
       main.appendChild(combina);
 
+      var totalLinha = el("p", "total-linha");
+      totalLinha.appendChild(document.createTextNode("Total: "));
+      var total = el("strong", "price");
+      total.id = "total";
+      totalLinha.appendChild(total);
+      main.appendChild(totalLinha);
+
       var pedir = el("a", "btn btn-big", "Pedir esta pizza no WhatsApp");
-      pedir.href = linkPedido(pizza);
       main.appendChild(pedir);
+
+      function atualizar() {
+        var tamanho = document.querySelector("input[name=tamanho]:checked").value;
+        var comBorda = document.querySelector("input[name=borda]:checked").value === "com";
+        total.textContent = formatarPreco(precoPizza(pizza, tamanho, comBorda));
+        pedir.href = linkPedido(pizza, tamanho, comBorda);
+      }
+      atualizar();
     }
   </script>
 </body>

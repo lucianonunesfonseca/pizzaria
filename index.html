@@ -86,7 +86,7 @@
       nome.textContent = pizza.nome;
       var preco = document.createElement("span");
       preco.className = "price";
-      preco.textContent = formatarPreco(pizza.preco);
+      preco.textContent = "a partir de " + formatarPreco(precoInicial(pizza));
       topo.appendChild(nome);
       topo.appendChild(preco);
 
