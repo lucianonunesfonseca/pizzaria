@@ -41,7 +41,7 @@
 
     <section class="cta">
       <h2>Bateu a fome?</h2>
-      <a class="btn btn-big" href="https://wa.me/5511999990000?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido.">Pedir no WhatsApp</a>
+      <a class="btn btn-big" href="sacola.html">Ver minha sacola</a>
       <p class="phone">(11) 99999-0000</p>
     </section>
   </main>
@@ -50,6 +50,7 @@
 
   <script src="pizzas.js"></script>
   <script src="bebidas.js"></script>
+  <script src="sacola.js"></script>
   <script>
     var ICONES = {
       bebida: '<path d="M7 3h10l-1 17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1L7 3z"/><path d="M7.5 9h9"/>',
@@ -91,8 +92,22 @@
         var descricao = document.createElement("p");
         descricao.textContent = item.descricao;
 
+        var adicionar = document.createElement("button");
+        adicionar.type = "button";
+        adicionar.className = "btn btn-add";
+        adicionar.textContent = "Adicionar";
+        adicionar.setAttribute("aria-label", "Adicionar " + item.nome + " à sacola");
+        var timer;
+        adicionar.addEventListener("click", function () {
+          adicionarASacola({ tipo: icone, id: item.id });
+          adicionar.textContent = "Adicionado ✓";
+          clearTimeout(timer);
+          timer = setTimeout(function () { adicionar.textContent = "Adicionar"; }, 1500);
+        });
+
         card.appendChild(topo);
         card.appendChild(descricao);
+        card.appendChild(adicionar);
         destino.appendChild(card);
       });
     }

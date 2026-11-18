@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minha sacola — Bella Massa</title>
+  <meta name="description" content="Confira os itens da sua sacola e envie o pedido pelo WhatsApp.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="index.html">Bella <span>Massa</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html#cardapio">Cardápio</a>
+      <a class="nav-link" href="bebidas.html">Bebidas</a>
+      <a class="nav-link" href="sobre.html">Sobre</a>
+      <a class="nav-link" href="contato.html">Contato</a>
+    </div>
+  </nav>
+
+  <header class="hero hero-small">
+    <h1>Minha <span>sacola</span></h1>
+  </header>
+
+  <main>
+    <noscript>
+      <p class="aviso">Para usar a sacola, ative o JavaScript do navegador. Ou faça o pedido direto pelo
+        <a href="https://wa.me/5511999990000">WhatsApp</a>.</p>
+    </noscript>
+    <p id="aviso-armazenamento" class="aviso" hidden>Seu navegador não permite guardar a sacola.
+      Os itens ficam apenas enquanto você não trocar de página.</p>
+    <section id="sacola"></section>
+  </main>
+
+  <footer>© Bella Massa — Massa fresca todos os dias</footer>
+
+  <script src="pizzas.js"></script>
+  <script src="bebidas.js"></script>
+  <script src="sacola.js"></script>
+  <script>
+    var conteudo = document.getElementById("sacola");
+    document.getElementById("aviso-armazenamento").hidden = ARMAZENA;
+
+    function el(tag, className, texto) {
+      var e = document.createElement(tag);
+      if (className) e.className = className;
+      if (texto !== undefined) e.textContent = texto;
+      return e;
+    }
+
+    function botao(className, texto, rotulo, aoClicar) {
+      var b = el("button", className, texto);
+      b.type = "button";
+      b.setAttribute("aria-label", rotulo);
+      b.addEventListener("click", aoClicar);
+      return b;
+    }
+
+    function podarSacola(itens) {
+      // Tira da sacola o que não existe mais nos arquivos de dados.
+      var validas = itens.map(function (i) { return i.chave; });
+      var linhas = lerSacola();
+      var mantidas = linhas.filter(function (l) { return validas.indexOf(chaveLinha(l)) !== -1; });
+      if (mantidas.length !== linhas.length) salvarSacola(mantidas);
+    }
+
+    function render() {
+      var itens = itensDaSacola();
+      podarSacola(itens);
+      conteudo.textContent = "";
+
+      if (itens.length === 0) {
+        var vazia = el("p", "aviso", "Sua sacola está vazia.");
+        vazia.id = "sacola-vazia";
+        conteudo.appendChild(vazia);
+        var ver = el("a", "btn", "Ver o cardápio");
+        ver.href = "index.html#cardapio";
+        conteudo.appendChild(ver);
+        return;
+      }
+
+      itens.forEach(function (item) {
+        var linha = el("article", "sacola-item");
+
+        var info = el("div", "sacola-info");
+        info.appendChild(el("h3", "sacola-nome", item.nome));
+        if (item.detalhe) info.appendChild(el("p", "sacola-detalhe", item.detalhe));
+        info.appendChild(el("p", "sacola-unit", formatarPreco(item.unit) + " cada"));
+        linha.appendChild(info);
+
+        var controles = el("div", "sacola-controles");
+        var menos = botao("qtd-menos", "−", "Diminuir a quantidade de " + item.nome,
+          function () { alterarQuantidade(item.chave, -1); render(); });
+        menos.disabled = item.qtd <= 1;
+        var mais = botao("qtd-mais", "+", "Aumentar a quantidade de " + item.nome,
+          function () { alterarQuantidade(item.chave, 1); render(); });
+        mais.disabled = item.qtd >= QTD_MAX;
+        controles.appendChild(menos);
+        controles.appendChild(el("span", "sacola-qtd", String(item.qtd)));
+        controles.appendChild(mais);
+        controles.appendChild(el("span", "sacola-subtotal", formatarPreco(item.subtotal)));
+        controles.appendChild(botao("remover", "Remover", "Remover " + item.nome + " da sacola",
+          function () { removerDaSacola(item.chave); render(); }));
+        linha.appendChild(controles);
+
+        conteudo.appendChild(linha);
+      });
+
+      var totalLinha = el("p", "total-linha");
+      totalLinha.appendChild(document.createTextNode("Total: "));
+      var total = el("strong", "price", formatarPreco(totalDaSacola()));
+      total.id = "sacola-total";
+      totalLinha.appendChild(total);
+      conteudo.appendChild(totalLinha);
+
+      var enviar = el("a", "btn btn-big", "Enviar pedido pelo WhatsApp");
+      enviar.id = "enviar";
+      enviar.href = linkPedidoSacola();
+      conteudo.appendChild(enviar);
+    }
+
+    render();
+  </script>
+</body>
+</html>

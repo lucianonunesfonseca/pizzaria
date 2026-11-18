@@ -75,11 +75,3 @@ function precoPizza(pizza, tamanho, comBorda) {
   var total = pizza.precos[tamanho] + (comBorda ? ACRESCIMO_BORDA : 0);
   return Math.round(total * 100) / 100;
 }
-
-function linkPedido(pizza, tamanho, comBorda) {
-  var mensagem =
-    "Olá! Quero pedir a pizza " + pizza.nome +
-    ", tamanho " + tamanho + ", " + (comBorda ? "com" : "sem") + " borda (" +
-    formatarPreco(precoPizza(pizza, tamanho, comBorda)) + ").";
-  return "https://wa.me/5511999990000?text=" + encodeURIComponent(mensagem);
-}

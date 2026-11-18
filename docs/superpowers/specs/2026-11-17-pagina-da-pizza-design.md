@@ -47,3 +47,9 @@ Nomes das classes CSS, detalhes visuais do card clicável, textos exatos dos avi
 - `pizza.html`: escolha de tamanho (P/M/G, com o preço de cada um) e de borda (sem / com, "+R$ 8,00") por botões de rádio estilizados (alvo >= 44 px, teclado ok); padrão P e sem borda; "Total" e o botão atualizam na hora.
 - Mensagem: "Olá! Quero pedir a pizza <nome>, tamanho <T>, <com|sem> borda (R$ <total>)."
 - Escolhido por mim: botões de rádio em vez de menu suspenso (toque no celular).
+
+## Atualização: sacola (2026-11-17)
+- Todo pedido passa pela sacola; o botão "Pedir esta pizza no WhatsApp" saiu. `pizza.html` tem "Adicionar à sacola" (com tamanho e borda); `bebidas.html` tem "Adicionar" em cada item (e o botão final virou "Ver minha sacola"). Os botões "Pedir no WhatsApp" do `index.html` ficam como contato geral.
+- `sacola.js`: guarda linhas no `localStorage` (`bella-sacola`) sem preços; mesmo item soma a quantidade (1 a 20); linhas inválidas são descartadas; sem `localStorage` usa memória e a `sacola.html` avisa. Botão flutuante com contagem em todas as páginas (menos na sacola).
+- `sacola.html`: lista, quantidade (− e +), remover, total e "Enviar pedido pelo WhatsApp". Mensagem: "Olá! Quero fazer este pedido:" + uma linha por item ("2x Margherita (M, com borda) — R$ 125,20") + "Total: R$ ...".
+- Fora do escopo: nome, endereço, entrega/retirada (combinados na conversa do WhatsApp).

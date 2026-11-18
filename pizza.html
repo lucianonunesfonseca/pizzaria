@@ -28,6 +28,7 @@
   <footer>© Bella Massa — Massa fresca todos os dias</footer>
 
   <script src="pizzas.js"></script>
+  <script src="sacola.js"></script>
   <script>
     var main = document.getElementById("pizza");
     var id = new URLSearchParams(location.search).get("id");
@@ -123,16 +124,34 @@
       totalLinha.appendChild(total);
       main.appendChild(totalLinha);
 
-      var pedir = el("a", "btn btn-big", "Pedir esta pizza no WhatsApp");
-      main.appendChild(pedir);
+      var adicionar = el("button", "btn btn-big btn-add", "Adicionar à sacola");
+      adicionar.type = "button";
+      main.appendChild(adicionar);
+      var aviso = el("p", "adicionado");
+      aviso.setAttribute("aria-live", "polite");
+      main.appendChild(aviso);
+
+      function selecao() {
+        return {
+          tamanho: document.querySelector("input[name=tamanho]:checked").value,
+          comBorda: document.querySelector("input[name=borda]:checked").value === "com"
+        };
+      }
 
       function atualizar() {
-        var tamanho = document.querySelector("input[name=tamanho]:checked").value;
-        var comBorda = document.querySelector("input[name=borda]:checked").value === "com";
-        total.textContent = formatarPreco(precoPizza(pizza, tamanho, comBorda));
-        pedir.href = linkPedido(pizza, tamanho, comBorda);
+        var sel = selecao();
+        total.textContent = formatarPreco(precoPizza(pizza, sel.tamanho, sel.comBorda));
       }
       atualizar();
+
+      var timer;
+      adicionar.addEventListener("click", function () {
+        var sel = selecao();
+        adicionarASacola({ tipo: "pizza", id: pizza.id, tamanho: sel.tamanho, borda: sel.comBorda });
+        aviso.textContent = "Adicionado à sacola!";
+        clearTimeout(timer);
+        timer = setTimeout(function () { aviso.textContent = ""; }, 2500);
+      });
     }
   </script>
 </body>
