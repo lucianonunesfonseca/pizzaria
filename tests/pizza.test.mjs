@@ -1,0 +1,30 @@
+import { launch, check, summary, B, ROOT } from './lib.mjs';
+const b = await launch(375);
+const PZ=[['margherita','Margherita','R$ 42,00'],['pepperoni','Pepperoni','R$ 56,00'],['quatro-queijos','Quatro Queijos','R$ 54,00'],['cogumelos','Cogumelos','R$ 52,00'],['vegetariana','Vegetariana','R$ 46,00'],['frango-barbecue','Frango com Barbecue','R$ 50,00']];
+console.log('Task 1');
+await b.open(B+'pizza.html?id=margherita');
+check('titulo da aba', await b.ev('document.title')==='Margherita — Bella Massa', await b.ev('document.title'));
+check('h1 e preco', (await b.ev('document.querySelector("h1")?.textContent'))==='Margherita' && (await b.ev('document.body.innerText.includes("R$ 42,00")')));
+check('3 ingredientes em lista', (await b.ev('document.querySelectorAll("main ul li").length'))===3);
+check('Combina com', await b.ev('document.body.innerText.includes("Combina com")'));
+check('foto da pizza carregada', await b.ev('(()=>{const i=document.querySelector("main img.pizza-foto");return !!i&&i.complete&&i.naturalWidth>0})()'));
+check('sem rolagem horizontal 375', (await b.ev('document.documentElement.scrollWidth'))===375);
+for (const [id,nome,preco] of PZ){
+  await b.open(B+'pizza.html?id='+id);
+  await b.ev('limparSacola();document.querySelector(".btn-add").click()');
+  const m=await b.ev('mensagemPedido()');
+  check('sacola '+id, m===`Olá! Quero fazer este pedido:\n1x ${nome} (P, sem borda) — ${preco}\nTotal: ${preco}`, m);
+  check('sem botao wa.me direto '+id, (await b.ev('[...document.querySelectorAll("a")].filter(a=>a.href.includes("wa.me")).length'))===0);
+}
+await b.open(B+'pizza.html');
+check('sem id: aviso+link', (await b.ev('document.body.innerText.includes("Não encontramos essa pizza.")')) && (await b.ev('document.querySelector("main a[href=\\"index.html#cardapio\\"]")!==null')));
+await b.open(B+'pizza.html?id=zzz');
+check('id inexistente: aviso', await b.ev('document.body.innerText.includes("Não encontramos essa pizza.")'));
+await b.open(B+'pizza.html?id='+encodeURIComponent('<img src=x onerror="window.__x=1;alert(1)">'));
+check('id com HTML nao executa', (await b.ev('window.__x'))===undefined && (await b.ev('document.querySelectorAll("main img").length'))===0 && b.dialogs.length===0);
+await b.jsOff(true); await b.open(B+'pizza.html?id=margherita');
+check('JS desligado: aviso com link wa.me', await b.ev('document.body.innerHTML.includes("wa.me/5562998452828")'));
+await b.jsOff(false);
+await b.setWidth(320); await b.open(B+'pizza.html?id=frango-barbecue');
+check('sem rolagem horizontal 320', (await b.ev('document.documentElement.scrollWidth'))===320);
+await b.close(); process.exit(summary()?1:0);

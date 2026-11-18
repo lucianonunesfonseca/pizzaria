@@ -1,0 +1,11 @@
+{
+  "name": "bella-massa",
+  "private": true,
+  "description": "Site da pizzaria Bella Massa (HTML, CSS e JavaScript puros)",
+  "scripts": {
+    "test": "node tests/run.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

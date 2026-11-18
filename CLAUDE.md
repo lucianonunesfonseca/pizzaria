@@ -21,3 +21,10 @@ Abrir: duplo clique em index.html.
 - Os links e formulários do WhatsApp abrem na **mesma aba** (sem `target="_blank"` nem `window.open`): em nova aba falhou no iPhone.
 - A barra do topo é fixa e tem 4 links (Cardápio, Bebidas, Sobre, Contato). Até 520 px de largura ela vira 2 linhas (nome em cima, links embaixo, ~95 px de altura) porque 4 links não cabem ao lado do nome; os `scroll-margin-top` do CSS (7.5rem nesse caso) dependem dessa altura.
 - Verificado a 375 px e 320 px, sem rolagem lateral e com alvos de toque de pelo menos 44 px.
+
+## Testes
+- Rodar tudo: `npm test` (o mesmo que `node tests/run.mjs`, leva uns 70 s). Um assunto só: `node tests/run.mjs sacola`. Com `-v` mostra também o que passou. Sai com código 1 se algo falhar.
+- Precisa de Node 22 ou mais novo e de Chrome ou Edge instalado (ele acha sozinho; senão defina `CHROME_PATH`). Não há nada para instalar.
+- Os testes abrem o site por `file://` num navegador sem janela, simulando celular (375 px, 320 px e outras larguras), e conferem páginas, preços, sacola, mensagens do WhatsApp, imagens e layout. Um arquivo por assunto em `tests/*.test.mjs`; os ajudantes (`launch`, `check`) estão em `tests/lib.mjs`.
+- Os testes conferem textos e números exatos (nomes, preços e ordem das pizzas, número do WhatsApp). Ao mudar o cardápio ou o número de propósito, atualize o teste correspondente. Um teste também falha se o número antigo de teste do WhatsApp (o que começava com 5511) voltar a aparecer em algum arquivo.
+- Não cobrem iPhone nem o WhatsApp de verdade.
