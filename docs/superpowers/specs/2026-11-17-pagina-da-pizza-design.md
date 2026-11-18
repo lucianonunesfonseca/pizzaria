@@ -19,7 +19,7 @@ Carrinho com várias pizzas e pagamento. (Tamanhos e borda entraram depois, ver 
 - HTML, CSS e JavaScript puros, sem frameworks nem build.
 - Abre por duplo clique (`file://`): `pizzas.js` é script comum (variável global `PIZZAS`), não módulo ES.
 - Mesmo visual (tokens em `:root` do `style.css`), mobile 375 px e 320 px sem rolagem lateral, alvos de toque >= 44 px.
-- Número do WhatsApp `5511999990000` (hoje repetido em vários lugares; manter coerente).
+- Número do WhatsApp `5562998452828` (hoje repetido em vários lugares; manter coerente).
 
 ## Abordagens consideradas
 - **A. Um HTML por pizza:** simples e sem JS, mas repete barra e número em 9 arquivos.

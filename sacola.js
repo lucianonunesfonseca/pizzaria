@@ -158,7 +158,7 @@ function mensagemPedido() {
 }
 
 function linkPedidoSacola() {
-  return "https://wa.me/5511999990000?text=" + encodeURIComponent(mensagemPedido());
+  return "https://wa.me/5562998452828?text=" + encodeURIComponent(mensagemPedido());
 }
 
 // Botão flutuante com a contagem de itens (todas as páginas, menos a sacola).
