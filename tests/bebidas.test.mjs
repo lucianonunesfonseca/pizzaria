@@ -22,7 +22,7 @@ check('9 botoes Adicionar (>=44px)', await b.ev('(()=>{const x=[...document.quer
 for (const p of ['index.html','sobre.html','contato.html','pizza.html?id=pepperoni','bebidas.html']){
   await b.open(B+p);
   const l=await b.ev('[...document.querySelectorAll(".nav-link")].map(a=>a.textContent+":"+a.getAttribute("href"))');
-  check('barra '+p, JSON.stringify(l)===JSON.stringify(['Cardápio:index.html#cardapio'.replace('index.html#cardapio',p.startsWith('index')?'#cardapio':'index.html#cardapio'),'Bebidas:bebidas.html','Sobre:sobre.html','Contato:contato.html']), JSON.stringify(l));
+  check('barra '+p, JSON.stringify(l)===JSON.stringify(['Cardápio:index.html#cardapio','Bebidas:bebidas.html','Sobre:sobre.html','Contato:contato.html']), JSON.stringify(l));
 }
 // larguras e rolagem lateral
 for (const w of [320,375,390,430,520,521,768,1024]){

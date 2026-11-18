@@ -69,3 +69,9 @@ Nomes das classes CSS, detalhes visuais do card clicável, textos exatos dos avi
 - Mensagem: itens, [Subtotal e Taxa de entrega na entrega,] Total, Nome, Entrega: <endereço> ou Retirada no balcão: <endereço>, Pagamento (com troco quando dinheiro), Obs.
 - Lembrar dados: nome, tipo, endereço e pagamento ficam no aparelho (`bella-cliente`), com opt-out que apaga; troco e obs nunca são guardados; dados corrompidos são ignorados. Texto digitado nunca entra como HTML.
 - Fora do escopo: calcular frete por bairro, horário de funcionamento, pagamento online.
+
+## Atualização: centralização do número e da barra do topo (2026-11-18)
+- `config.js` (novo): `WHATSAPP_NUMERO`, `TELEFONE_EXIBIDO`, `TAXA_ENTREGA`, `FORMAS_PAGAMENTO`, `ENDERECO_RETIRADA` (saíram do `sacola.js`) e `linkWhatsApp(mensagem)`; preenche `a[data-whatsapp]` e `[data-telefone]`. O número passou de 11 lugares para 1, mais 4 avisos `<noscript>` em texto fixo (JavaScript desligado), guardados por teste.
+- `layout.js` (novo): monta a barra do topo (logo + Cardápio, Bebidas, Sobre, Contato) e marca a página atual. Cada página só tem `<nav class="topbar" id="topbar">` com o logo + `layout.js`. O link do cardápio é `index.html#cardapio` em todas as páginas.
+- Escolha: JavaScript sem etapa de build. Custo aceito: sem JavaScript a barra mostra só o logo, e os links não estão no HTML cru (buscadores). `min-height: 89px` no celular evita pulo de layout.
+- Fica de fora (repetido em várias páginas): rodapé, horários (index e sobre) e as 3 linhas de ícones no `<head>`.

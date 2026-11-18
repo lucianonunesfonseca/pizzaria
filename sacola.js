@@ -1,15 +1,13 @@
 // Sacola de pedidos: guarda as linhas no navegador (localStorage), calcula o
 // total e monta a mensagem do WhatsApp. Os preços não ficam guardados: são
-// calculados na hora a partir de pizzas.js e bebidas.js, que toda página com
+// calculados na hora a partir de pizzas.js e bebidas.js (config.js antes deles), que toda página com
 // este script precisa carregar antes (itens que saíram do cardápio são ignorados).
 //
 // Uma linha da sacola é:
 //   pizza:               { tipo: "pizza", id, tamanho: "P"|"M"|"G", borda: bool, qtd }
 //   bebida / sobremesa:  { tipo: "bebida"|"sobremesa", id, qtd }
-// ---- Configuração do pedido (edite aqui) ----
-var TAXA_ENTREGA = 7; // R$ somados ao total quando o cliente escolhe entrega; 0 = entrega grátis
-var FORMAS_PAGAMENTO = ["Dinheiro", "PIX", "Cartão de débito", "Cartão de crédito"]; // "Dinheiro" mostra o campo de troco
-var ENDERECO_RETIRADA = "Rua A, Jardim Florença, Itaberaí-GO"; // mostrado na retirada; "" para não mostrar
+// Taxa de entrega, formas de pagamento, endereço de retirada e o número do WhatsApp ficam em config.js.
+// ---- Limites dos campos do pedido ----
 var LIMITES = { nome: 60, rua: 80, bairro: 40, complemento: 60, troco: 20, obs: 200 }; // tamanho máximo dos campos
 
 var SACOLA_CHAVE = "bella-sacola";
@@ -226,7 +224,7 @@ function mensagemCompleta(d) {
 }
 
 function linkPedidoSacola(dados) {
-  return "https://wa.me/5562998452828?text=" + encodeURIComponent(mensagemCompleta(dados));
+  return linkWhatsApp(mensagemCompleta(dados));
 }
 
 // Dados do cliente lembrados neste aparelho (só nome, entrega/retirada, endereço e pagamento).
