@@ -175,6 +175,11 @@ a.card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .price { color: var(--accent); font-weight: 700; white-space: nowrap; }
 .card p { color: var(--muted); font-size: 0.95rem; }
 
+.item:hover { border-color: var(--border); transform: none; }
+.item-foto { margin: 0 0 1rem; aspect-ratio: 16 / 9; width: 100%; border-radius: 12px; }
+img.item-foto { display: block; object-fit: cover; }
+.item .photo-placeholder { max-width: none; }
+
 .hours ul {
   list-style: none;
   max-width: 480px;
@@ -273,4 +278,11 @@ footer {
   .brand { font-size: 1rem; white-space: nowrap; }
   .nav-links { margin-right: -0.5rem; }
   .nav-link { padding: 0 0.5rem; font-size: 0.95rem; }
+}
+
+@media (max-width: 520px) {
+  .topbar { flex-wrap: wrap; padding-top: 0.5rem; padding-bottom: 0; }
+  .nav-links { width: 100%; justify-content: space-between; margin-right: 0; }
+  .nav-link { padding: 0 0.25rem; margin: 0; }
+  #cardapio, #reserva { scroll-margin-top: 7.5rem; }
 }

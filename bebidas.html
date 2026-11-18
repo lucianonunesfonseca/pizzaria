@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bebidas e Sobremesas — Bella Massa</title>
+  <meta name="description" content="Bebidas e sobremesas da pizzaria Bella Massa, com descrição e preços.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="index.html">Bella <span>Massa</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html#cardapio">Cardápio</a>
+      <a class="nav-link" href="bebidas.html" aria-current="page">Bebidas</a>
+      <a class="nav-link" href="sobre.html">Sobre</a>
+      <a class="nav-link" href="contato.html">Contato</a>
+    </div>
+  </nav>
+
+  <header class="hero hero-small">
+    <h1>Bebidas e <span>Sobremesas</span></h1>
+    <p class="slogan">Para acompanhar a sua pizza</p>
+  </header>
+
+  <main>
+    <noscript>
+      <p class="aviso">Para ver as bebidas e sobremesas, ative o JavaScript do navegador. Ou peça direto pelo
+        <a href="https://wa.me/5511999990000">WhatsApp</a>.</p>
+    </noscript>
+
+    <section id="bebidas">
+      <h2>Bebidas</h2>
+      <div class="menu" id="lista-bebidas"></div>
+    </section>
+
+    <section id="sobremesas">
+      <h2>Sobremesas</h2>
+      <div class="menu" id="lista-sobremesas"></div>
+    </section>
+
+    <section class="cta">
+      <h2>Bateu a fome?</h2>
+      <a class="btn btn-big" href="https://wa.me/5511999990000?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido.">Pedir no WhatsApp</a>
+      <p class="phone">(11) 99999-0000</p>
+    </section>
+  </main>
+
+  <footer>© Bella Massa — Massa fresca todos os dias</footer>
+
+  <script src="pizzas.js"></script>
+  <script src="bebidas.js"></script>
+  <script>
+    var ICONES = {
+      bebida: '<path d="M7 3h10l-1 17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1L7 3z"/><path d="M7.5 9h9"/>',
+      sobremesa: '<path d="M4 12h16l-1.5 8h-13L4 12z"/><path d="M6 12c0-3 2.5-5 6-5s6 2 6 5"/><circle cx="12" cy="5" r="1"/>'
+    };
+
+    function montarLista(destino, itens, icone) {
+      itens.forEach(function (item) {
+        var card = document.createElement("article");
+        card.className = "card item";
+
+        if (item.imagem) {
+          var img = document.createElement("img");
+          img.className = "item-foto";
+          img.src = item.imagem;
+          img.alt = item.nome;
+          card.appendChild(img);
+        } else {
+          var fig = document.createElement("figure");
+          fig.className = "photo-placeholder item-foto";
+          fig.setAttribute("role", "img");
+          fig.setAttribute("aria-label", "Foto de " + item.nome + " em breve");
+          fig.innerHTML =
+            '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            ICONES[icone] + "</svg>";
+          card.appendChild(fig);
+        }
+
+        var topo = document.createElement("div");
+        topo.className = "card-top";
+        var nome = document.createElement("h3");
+        nome.textContent = item.nome;
+        var preco = document.createElement("span");
+        preco.className = "price";
+        preco.textContent = formatarPreco(item.preco);
+        topo.appendChild(nome);
+        topo.appendChild(preco);
+
+        var descricao = document.createElement("p");
+        descricao.textContent = item.descricao;
+
+        card.appendChild(topo);
+        card.appendChild(descricao);
+        destino.appendChild(card);
+      });
+    }
+
+    montarLista(document.getElementById("lista-bebidas"), BEBIDAS, "bebida");
+    montarLista(document.getElementById("lista-sobremesas"), SOBREMESAS, "sobremesa");
+  </script>
+</body>
+</html>

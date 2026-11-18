@@ -13,10 +13,10 @@ Abrir: duplo clique em index.html.
 ## Git
 - Depois de cada mudança que funcionar, faça um commit com mensagem curta em português.
 ## Estrutura
-- Páginas: `index.html` (início, reserva), `pizza.html?id=<id>` (uma pizza), `sobre.html`, `contato.html`. Estilo único em `style.css`.
+- Páginas: `index.html` (início, reserva), `pizza.html?id=<id>` (uma pizza), `bebidas.html` (bebidas e sobremesas, dados em `bebidas.js`; usa `formatarPreco` do `pizzas.js`, então carrega os dois), `sobre.html`, `contato.html`. Estilo único em `style.css`.
 - `pizzas.js` é a **fonte única do cardápio** (nome, preços por tamanho `precos: {P, M, G}`, ingredientes, foto, acompanhamento). Preços, ingredientes, fotos e acompanhamentos se editam só ali: o cardápio do `index.html` e a `pizza.html` são gerados a partir dele. Cada preço de tamanho é um número editável (os valores iniciais foram M = P + 30% e G = M + 50%). O acréscimo da borda (R$ 8, igual para todas) é a constante `ACRESCIMO_BORDA`. O cardápio mostra só "a partir de" + o menor preço; a escolha de tamanho e borda fica na `pizza.html` e vai na mensagem do pedido. Foto: coloque o arquivo na pasta e escreva o nome em `imagem`.
 - A barra do topo está repetida em cada página: ao criar ou renomear uma página, edite todas.
 - O número do WhatsApp (`5511999990000`) está escrito em `pizzas.js`, `index.html`, `pizza.html` e `contato.html`. Mude em todos. Parece um número de teste.
 - Os links e formulários do WhatsApp abrem na **mesma aba** (sem `target="_blank"` nem `window.open`): em nova aba falhou no iPhone.
-- A barra do topo é fixa (~71 px no celular); os `scroll-margin-top` do CSS dependem dessa altura.
+- A barra do topo é fixa e tem 4 links (Cardápio, Bebidas, Sobre, Contato). Até 520 px de largura ela vira 2 linhas (nome em cima, links embaixo, ~95 px de altura) porque 4 links não cabem ao lado do nome; os `scroll-margin-top` do CSS (7.5rem nesse caso) dependem dessa altura.
 - Verificado a 375 px e 320 px, sem rolagem lateral e com alvos de toque de pelo menos 44 px.
