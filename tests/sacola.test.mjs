@@ -34,8 +34,8 @@ check('4 linhas com nome/qtd/subtotal', JSON.stringify(rows.map(r=>[r.n,r.q,r.s]
 check('detalhe da pizza (M, com borda) e (P, sem borda)', await b.ev('document.body.innerText.includes("M, com borda") && document.body.innerText.includes("P, sem borda")'));
 check('total R$ 188,20', (await b.ev('document.getElementById("sacola-total")?.textContent'))==='R$ 188,20');
 const esperado='Olá! Quero fazer este pedido:\n2x Guaraná — R$ 12,00\n1x Suco de laranja natural — R$ 9,00\n2x Margherita (M, com borda) — R$ 125,20\n1x Margherita (P, sem borda) — R$ 42,00\nTotal: R$ 188,20';
-const env=await b.ev('(()=>{const a=document.getElementById("enviar");return a?{h:decodeURIComponent(a.getAttribute("href")),t:a.hasAttribute("target")}:null})()');
-check('botao Enviar: wa.me, mesma aba, mensagem completa', env && env.h==='https://wa.me/5562998452828?text='+esperado && env.t===false, JSON.stringify(env));
+const env=await b.ev(`(()=>{const f=document.getElementById("form-pedido");f.elements["nome"].value="Ana";f.querySelector("input[name=tipo][value=retirada]").click();f.querySelector("input[name=pagamento][value=PIX]").click();const e=document.getElementById("enviar");return {h:decodeURIComponent(linkPedidoSacola(lerDadosFormulario())),tag:e.tagName,tgt:e.hasAttribute("target")}})()`);
+check('Enviar: botao do formulario (mesma aba), link do WhatsApp com itens, dados e total', env.h==='https://wa.me/5562998452828?text='+esperado+'\nNome: Ana\nRetirada no balcão: Rua A, Jardim Florença, Itaberaí-GO\nPagamento: PIX' && env.tag==='BUTTON' && env.tgt===false, JSON.stringify(env));
 // quantidade
 await b.ev('document.querySelectorAll(".sacola-item")[1].querySelector(".qtd-mais").click()');
 check('+ aumenta qtd, subtotal e total', (await b.ev('document.querySelectorAll(".sacola-item")[1].querySelector(".sacola-qtd").textContent'))==='2' && (await b.ev('document.getElementById("sacola-total").textContent'))==='R$ 197,20');
@@ -51,7 +51,7 @@ await b.setWidth(375); await b.open(B+'sacola.html');
 await b.ev('document.querySelectorAll(".sacola-item")[0].querySelector(".remover").click()');
 check('remover tira a linha e atualiza o total', (await b.ev('document.querySelectorAll(".sacola-item").length'))===3 && (await b.ev('document.getElementById("sacola-total").textContent'))==='R$ 176,20');
 while ((await b.ev('document.querySelectorAll(".sacola-item").length'))>0) await b.ev('document.querySelector(".sacola-item .remover").click()');
-check('vazia: aviso, link ao cardapio, sem botao Enviar', (await b.ev('!!document.getElementById("sacola-vazia")')) && (await b.ev('!!document.querySelector("a.btn[href=\\"index.html#cardapio\\"]")')) && (await b.ev('document.getElementById("enviar")'))===null);
+check('vazia: aviso, link ao cardapio, formulario escondido', (await b.ev('!!document.getElementById("sacola-vazia")')) && (await b.ev('!!document.querySelector("a.btn[href=\\"index.html#cardapio\\"]")')) && (await b.ev('document.getElementById("form-pedido").hidden'))===true);
 // limite de quantidade
 await b.open(B+'bebidas.html');
 await b.ev('localStorage.clear(); for(let i=0;i<25;i++) adicionarASacola({tipo:"bebida",id:"guarana"})');

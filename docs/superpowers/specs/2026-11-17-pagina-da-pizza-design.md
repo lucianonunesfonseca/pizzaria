@@ -62,3 +62,10 @@ Nomes das classes CSS, detalhes visuais do card clicável, textos exatos dos avi
 ## Atualização: favicon e limpeza da sacola (2026-11-18)
 - Favicon: `favicon.svg` (fatia de pizza laranja sobre fundo escuro), `favicon-32.png` e `apple-touch-icon.png` (180 px, sem cantos arredondados, o iOS arredonda sozinho), ligados no `<head>` das 6 páginas.
 - Depois de enviar o pedido a sacola não esvazia sozinha (se o WhatsApp não abrir o cliente perderia tudo). Ao tocar em "Enviar", a `sacola.html` marca o envio na aba (`sessionStorage`); ao voltar (carregar a página, `pageshow` ou `visibilitychange`), pergunta "Você enviou o pedido pelo WhatsApp?" com "Sim, limpar a sacola" / "Não, manter os itens". Existe também o botão "Limpar sacola". Sacola vazia apaga a marca; `sessionStorage` bloqueado não quebra nada.
+
+## Atualização: dados de entrega no pedido (2026-11-18)
+- A `sacola.html` ganhou o formulário "Seus dados": entrega ou retirada (sem opção pré-marcada), endereço (rua e número, bairro, complemento opcional) só na entrega, nome, pagamento (Dinheiro, PIX, Cartão de débito, Cartão de crédito; troco opcional só para dinheiro) e observações. Campos obrigatórios validados pelo navegador; "Enviar pedido pelo WhatsApp" é o submit do formulário.
+- Negócio: taxa de entrega fixa de R$ 7 (somada ao total só na entrega; subtotal e taxa aparecem), retirada no balcão em "Rua A, Jardim Florença, Itaberaí-GO", pagamento na hora por qualquer meio. Tudo em constantes no topo do `sacola.js`.
+- Mensagem: itens, [Subtotal e Taxa de entrega na entrega,] Total, Nome, Entrega: <endereço> ou Retirada no balcão: <endereço>, Pagamento (com troco quando dinheiro), Obs.
+- Lembrar dados: nome, tipo, endereço e pagamento ficam no aparelho (`bella-cliente`), com opt-out que apaga; troco e obs nunca são guardados; dados corrompidos são ignorados. Texto digitado nunca entra como HTML.
+- Fora do escopo: calcular frete por bairro, horário de funcionamento, pagamento online.

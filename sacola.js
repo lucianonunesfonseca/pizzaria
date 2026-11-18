@@ -6,7 +6,14 @@
 // Uma linha da sacola é:
 //   pizza:               { tipo: "pizza", id, tamanho: "P"|"M"|"G", borda: bool, qtd }
 //   bebida / sobremesa:  { tipo: "bebida"|"sobremesa", id, qtd }
+// ---- Configuração do pedido (edite aqui) ----
+var TAXA_ENTREGA = 7; // R$ somados ao total quando o cliente escolhe entrega; 0 = entrega grátis
+var FORMAS_PAGAMENTO = ["Dinheiro", "PIX", "Cartão de débito", "Cartão de crédito"]; // "Dinheiro" mostra o campo de troco
+var ENDERECO_RETIRADA = "Rua A, Jardim Florença, Itaberaí-GO"; // mostrado na retirada; "" para não mostrar
+var LIMITES = { nome: 60, rua: 80, bairro: 40, complemento: 60, troco: 20, obs: 200 }; // tamanho máximo dos campos
+
 var SACOLA_CHAVE = "bella-sacola";
+var CHAVE_CLIENTE = "bella-cliente";
 var QTD_MAX = 20;
 var sacolaMemoria = []; // usada se o navegador não deixar guardar dados
 
@@ -176,17 +183,85 @@ function contagemDaSacola() {
   return lerSacola().reduce(function (soma, l) { return soma + l.qtd; }, 0);
 }
 
-function mensagemPedido() {
-  var linhas = itensDaSacola().map(function (i) {
+function linhasDosItens() {
+  return itensDaSacola().map(function (i) {
     return i.qtd + "x " + i.nome + (i.detalhe ? " (" + i.detalhe + ")" : "") +
       " — " + formatarPreco(i.subtotal);
   });
-  return "Olá! Quero fazer este pedido:\n" + linhas.join("\n") +
+}
+
+// Só os itens e o total deles (sem os dados do cliente).
+function mensagemPedido() {
+  return "Olá! Quero fazer este pedido:\n" + linhasDosItens().join("\n") +
     "\nTotal: " + formatarPreco(totalDaSacola());
 }
 
-function linkPedidoSacola() {
-  return "https://wa.me/5562998452828?text=" + encodeURIComponent(mensagemPedido());
+// "150" -> "R$ 150,00"; texto livre ("uma nota de 100") vai como escrito.
+function formatarTroco(texto) {
+  var n = Number(String(texto).replace(",", "."));
+  return isFinite(n) && n > 0 ? formatarPreco(n) : texto;
+}
+
+// dados: { nome, tipo: "entrega"|"retirada", rua, bairro, complemento, pagamento, troco, obs }
+function mensagemCompleta(d) {
+  var subtotal = totalDaSacola();
+  var entrega = d.tipo === "entrega";
+  var taxa = entrega ? TAXA_ENTREGA : 0;
+  var linhas = ["Olá! Quero fazer este pedido:"].concat(linhasDosItens());
+  if (taxa > 0) {
+    linhas.push("Subtotal: " + formatarPreco(subtotal));
+    linhas.push("Taxa de entrega: " + formatarPreco(taxa));
+  }
+  linhas.push("Total: " + formatarPreco(arredondar(subtotal + taxa)));
+  linhas.push("Nome: " + d.nome);
+  if (entrega) {
+    linhas.push("Entrega: " + d.rua + " - " + d.bairro + (d.complemento ? " (" + d.complemento + ")" : ""));
+  } else {
+    linhas.push("Retirada no balcão" + (ENDERECO_RETIRADA ? ": " + ENDERECO_RETIRADA : ""));
+  }
+  linhas.push("Pagamento: " + d.pagamento +
+    (d.pagamento === "Dinheiro" && d.troco ? " (troco para " + formatarTroco(d.troco) + ")" : ""));
+  if (d.obs) linhas.push("Obs: " + d.obs);
+  return linhas.join("\n");
+}
+
+function linkPedidoSacola(dados) {
+  return "https://wa.me/5562998452828?text=" + encodeURIComponent(mensagemCompleta(dados));
+}
+
+// Dados do cliente lembrados neste aparelho (só nome, entrega/retirada, endereço e pagamento).
+function lerCliente() {
+  if (!ARMAZENA) return null;
+  var c;
+  try {
+    c = JSON.parse(window.localStorage.getItem(CHAVE_CLIENTE) || "null");
+  } catch (e) {
+    return null;
+  }
+  if (!c || typeof c !== "object" || Array.isArray(c)) return null;
+  function texto(v, max) { return typeof v === "string" ? v.slice(0, max) : ""; }
+  return {
+    nome: texto(c.nome, LIMITES.nome),
+    tipo: c.tipo === "entrega" || c.tipo === "retirada" ? c.tipo : "",
+    rua: texto(c.rua, LIMITES.rua),
+    bairro: texto(c.bairro, LIMITES.bairro),
+    complemento: texto(c.complemento, LIMITES.complemento),
+    pagamento: FORMAS_PAGAMENTO.indexOf(c.pagamento) !== -1 ? c.pagamento : ""
+  };
+}
+
+function salvarCliente(d) {
+  if (!ARMAZENA) return;
+  try {
+    window.localStorage.setItem(CHAVE_CLIENTE, JSON.stringify({
+      nome: d.nome, tipo: d.tipo, rua: d.rua, bairro: d.bairro,
+      complemento: d.complemento, pagamento: d.pagamento
+    }));
+  } catch (e) {}
+}
+
+function limparCliente() {
+  try { window.localStorage.removeItem(CHAVE_CLIENTE); } catch (e) {}
 }
 
 // Botão flutuante com a contagem de itens (todas as páginas, menos a sacola).

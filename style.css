@@ -248,6 +248,18 @@ button.btn { border: none; cursor: pointer; font-family: inherit; }
 .limpar { display: block; min-height: 44px; margin: 0.9rem auto 0; padding: 0 1rem; border: 2px solid var(--border); border-radius: 12px; background: none; color: var(--muted); font: inherit; cursor: pointer; }
 .limpar:hover { color: var(--accent); border-color: var(--accent); }
 
+.form-pedido { max-width: none; margin-top: 1.5rem; }
+.form-pedido .pizza-sub { margin: 0; }
+.form-pedido .opcoes { margin-top: 0; min-width: 0; }
+.campos-entrega { display: grid; gap: 1rem; }
+.campos-entrega[hidden], .form-pedido [hidden] { display: none; }
+.info-retirada { padding: 0.85rem 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); }
+.form .lembrar { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-weight: 500; color: var(--muted); cursor: pointer; }
+.form .lembrar input { width: 1.4rem; height: 1.4rem; padding: 0; accent-color: var(--accent); }
+.totais { display: grid; gap: 0.35rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+.totais > div { display: flex; justify-content: space-between; align-items: baseline; }
+.totais .total-linha { margin: 0.25rem 0 0; }
+
 .sacola-item { display: grid; gap: 0.75rem; margin-bottom: 0.75rem; padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
 .sacola-nome { font-size: 1.1rem; }
 .sacola-detalhe, .sacola-unit { color: var(--muted); font-size: 0.95rem; }

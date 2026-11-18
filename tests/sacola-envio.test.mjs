@@ -7,7 +7,7 @@ const semear = async () => {
   await b.ev(`localStorage.setItem('bella-sacola', '${SEED}'); sessionStorage.removeItem('bella-enviado'); 'ok'`);
 };
 // toca em "Enviar" sem sair da pagina (bloqueia a navegacao para o WhatsApp)
-const enviarSemSair = () => b.ev(`(() => { const a = document.getElementById('enviar'); a.addEventListener('click', e => e.preventDefault(), true); a.click(); return sessionStorage.getItem('bella-enviado'); })()`);
+const enviarSemSair = () => b.ev(`(() => { window.navegarPara = () => {}; const f = document.getElementById('form-pedido'); f.elements['nome'].value = 'Ana'; f.querySelector('input[name=tipo][value=retirada]').click(); f.querySelector('input[name=pagamento][value=PIX]').click(); document.getElementById('enviar').click(); return sessionStorage.getItem('bella-enviado'); })()`);
 const banner = () => b.ev('!!document.getElementById("pedido-enviado")');
 const linhas = () => b.ev('document.querySelectorAll(".sacola-item").length');
 const flag = () => b.ev('sessionStorage.getItem("bella-enviado")');
@@ -63,7 +63,7 @@ check('vazia com marca antiga: sem pergunta e marca apagada', (await banner()) =
 await semear();
 await b.send('Page.addScriptToEvaluateOnNewDocument', { source: 'Object.defineProperty(window, "sessionStorage", { get() { throw new Error("bloqueado"); } })' });
 await b.open(B + 'sacola.html');
-const r = await b.ev(`(() => { try { const a = document.getElementById('enviar'); a.addEventListener('click', e => e.preventDefault(), true); a.click(); return document.getElementById('pedido-enviado') ? 'pergunta' : 'ok'; } catch (e) { return 'ERR ' + e.message; } })()`);
+const r = await b.ev(`(() => { try { window.navegarPara = () => {}; const f = document.getElementById('form-pedido'); f.elements['nome'].value = 'Ana'; f.querySelector('input[name=tipo][value=retirada]').click(); f.querySelector('input[name=pagamento][value=PIX]').click(); document.getElementById('enviar').click(); return document.getElementById('pedido-enviado') ? 'pergunta' : 'ok'; } catch (e) { return 'ERR ' + e.message; } })()`);
 check('sessionStorage bloqueado: Enviar nao quebra e a pagina segue normal', r === 'ok', r);
 await b.close();
 process.exit(summary() ? 1 : 0);

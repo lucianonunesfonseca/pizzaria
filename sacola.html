@@ -33,6 +33,68 @@
     <p id="aviso-armazenamento" class="aviso" hidden>Seu navegador não permite guardar a sacola.
       Os itens ficam apenas enquanto você não trocar de página.</p>
     <section id="sacola"></section>
+
+    <form id="form-pedido" class="form form-pedido" hidden>
+      <h2 class="pizza-sub">Seus dados</h2>
+
+      <fieldset class="opcoes">
+        <legend>Como você quer receber?</legend>
+        <div class="opcoes-linha">
+          <label class="opcao">
+            <input type="radio" name="tipo" value="entrega" required>
+            <span class="opcao-texto">Entrega<small id="legenda-entrega"></small></span>
+          </label>
+          <label class="opcao">
+            <input type="radio" name="tipo" value="retirada">
+            <span class="opcao-texto">Retirada<small>no balcão</small></span>
+          </label>
+        </div>
+      </fieldset>
+
+      <p id="info-retirada" class="info-retirada" hidden></p>
+
+      <div id="campos-entrega" class="campos-entrega" hidden>
+        <label>Rua e número
+          <input type="text" name="rua" autocomplete="address-line1">
+        </label>
+        <label>Bairro
+          <input type="text" name="bairro" autocomplete="address-level3">
+        </label>
+        <label>Complemento ou ponto de referência (opcional)
+          <input type="text" name="complemento" autocomplete="address-line2">
+        </label>
+      </div>
+
+      <label>Seu nome
+        <input type="text" name="nome" required autocomplete="name">
+      </label>
+
+      <fieldset class="opcoes">
+        <legend>Pagamento na hora</legend>
+        <div class="opcoes-linha" id="opcoes-pagamento"></div>
+      </fieldset>
+
+      <label id="campo-troco" hidden>Troco para quanto? (opcional)
+        <input type="text" name="troco" inputmode="decimal" placeholder="Ex.: 100">
+      </label>
+
+      <label>Observações (opcional)
+        <textarea name="obs" rows="3" placeholder="Ex.: sem cebola, campainha não funciona..."></textarea>
+      </label>
+
+      <label class="lembrar">
+        <input type="checkbox" name="lembrar" checked>
+        <span>Lembrar meus dados neste aparelho</span>
+      </label>
+
+      <div class="totais">
+        <div id="linha-subtotal" hidden><span>Itens</span><strong id="sacola-subtotal"></strong></div>
+        <div id="linha-taxa" hidden><span>Taxa de entrega</span><strong id="sacola-taxa"></strong></div>
+        <div class="total-linha"><span>Total:</span><strong class="price" id="sacola-total"></strong></div>
+      </div>
+
+      <button type="submit" id="enviar" class="btn btn-big">Enviar pedido pelo WhatsApp</button>
+    </form>
   </main>
 
   <footer>© Bella Massa — Massa fresca todos os dias</footer>
@@ -42,6 +104,7 @@
   <script src="sacola.js"></script>
   <script>
     var conteudo = document.getElementById("sacola");
+    var form = document.getElementById("form-pedido");
     document.getElementById("aviso-armazenamento").hidden = ARMAZENA;
 
     function el(tag, className, texto) {
@@ -58,6 +121,100 @@
       b.addEventListener("click", aoClicar);
       return b;
     }
+
+    // ---- Formulário "Seus dados" ----
+
+    function lerDadosFormulario() {
+      function campo(nome) { return form.elements[nome].value.trim().slice(0, LIMITES[nome]); }
+      var tipo = form.querySelector("input[name=tipo]:checked");
+      var pagamento = form.querySelector("input[name=pagamento]:checked");
+      return {
+        nome: campo("nome"),
+        tipo: tipo ? tipo.value : "",
+        rua: campo("rua"),
+        bairro: campo("bairro"),
+        complemento: campo("complemento"),
+        pagamento: pagamento ? pagamento.value : "",
+        troco: campo("troco"),
+        obs: campo("obs"),
+        lembrar: form.elements["lembrar"].checked
+      };
+    }
+
+    // Mostra/esconde campos, ajusta o que é obrigatório e recalcula o total.
+    function atualizarFormulario() {
+      var d = lerDadosFormulario();
+      var entrega = d.tipo === "entrega";
+      var comTaxa = entrega && TAXA_ENTREGA > 0;
+      var subtotal = totalDaSacola();
+
+      document.getElementById("campos-entrega").hidden = !entrega;
+      form.elements["rua"].required = entrega;
+      form.elements["bairro"].required = entrega;
+
+      var info = document.getElementById("info-retirada");
+      info.hidden = !(d.tipo === "retirada" && ENDERECO_RETIRADA);
+      info.textContent = "Retirada no balcão: " + ENDERECO_RETIRADA;
+
+      document.getElementById("campo-troco").hidden = d.pagamento !== "Dinheiro";
+
+      document.getElementById("linha-subtotal").hidden = !comTaxa;
+      document.getElementById("linha-taxa").hidden = !comTaxa;
+      document.getElementById("sacola-subtotal").textContent = formatarPreco(subtotal);
+      document.getElementById("sacola-taxa").textContent = formatarPreco(TAXA_ENTREGA);
+      document.getElementById("sacola-total").textContent =
+        formatarPreco(arredondar(subtotal + (comTaxa ? TAXA_ENTREGA : 0)));
+    }
+
+    function prepararFormulario() {
+      document.getElementById("legenda-entrega").textContent =
+        TAXA_ENTREGA > 0 ? "taxa " + formatarPreco(TAXA_ENTREGA) : "grátis";
+
+      FORMAS_PAGAMENTO.forEach(function (forma, i) {
+        var rotulo = el("label", "opcao");
+        var radio = el("input");
+        radio.type = "radio";
+        radio.name = "pagamento";
+        radio.value = forma;
+        radio.required = i === 0; // basta marcar o primeiro do grupo como obrigatório
+        rotulo.appendChild(radio);
+        rotulo.appendChild(el("span", "opcao-texto", forma));
+        document.getElementById("opcoes-pagamento").appendChild(rotulo);
+      });
+
+      Object.keys(LIMITES).forEach(function (nome) { form.elements[nome].maxLength = LIMITES[nome]; });
+
+      var c = lerCliente(); // dados lembrados da última vez
+      if (c) {
+        form.elements["nome"].value = c.nome;
+        form.elements["rua"].value = c.rua;
+        form.elements["bairro"].value = c.bairro;
+        form.elements["complemento"].value = c.complemento;
+        var tipo = form.querySelector("input[name=tipo][value=\"" + c.tipo + "\"]");
+        if (tipo) tipo.checked = true;
+        var pagamento = form.querySelector("input[name=pagamento][value=\"" + c.pagamento + "\"]");
+        if (pagamento) pagamento.checked = true;
+      }
+
+      form.addEventListener("change", atualizarFormulario);
+      form.elements["lembrar"].addEventListener("change", function () {
+        if (!form.elements["lembrar"].checked) limparCliente(); // desmarcar apaga o que estava guardado
+      });
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var dados = lerDadosFormulario();
+        if (dados.lembrar) salvarCliente(dados); else limparCliente();
+        marcarPedidoEnviado();
+        navegarPara(linkPedidoSacola(dados));
+      });
+    }
+
+    // Em função própria para os testes poderem trocar (mesma aba, sem abrir o WhatsApp).
+    function navegarPara(url) {
+      window.location.href = url;
+    }
+
+    // ---- Itens da sacola ----
 
     function podarSacola(itens) {
       // Tira da sacola o que não existe mais nos arquivos de dados.
@@ -97,6 +254,7 @@
       var itens = itensDaSacola();
       podarSacola(itens);
       conteudo.textContent = "";
+      form.hidden = itens.length === 0;
 
       if (itens.length === 0) {
         limparMarcaEnvio(); // sacola vazia: não há o que perguntar
@@ -139,24 +297,13 @@
         conteudo.appendChild(linha);
       });
 
-      var totalLinha = el("p", "total-linha");
-      totalLinha.appendChild(document.createTextNode("Total: "));
-      var total = el("strong", "price", formatarPreco(totalDaSacola()));
-      total.id = "sacola-total";
-      totalLinha.appendChild(total);
-      conteudo.appendChild(totalLinha);
-
-      var enviar = el("a", "btn btn-big", "Enviar pedido pelo WhatsApp");
-      enviar.id = "enviar";
-      enviar.href = linkPedidoSacola();
-      enviar.addEventListener("click", marcarPedidoEnviado);
-      conteudo.appendChild(enviar);
-
       var limpar = el("button", "limpar", "Limpar sacola");
       limpar.id = "limpar";
       limpar.type = "button";
       limpar.addEventListener("click", function () { limparSacola(); render(); });
       conteudo.appendChild(limpar);
+
+      atualizarFormulario();
     }
 
     // Ao voltar do WhatsApp (a aba reaparece), pergunta se pode limpar a sacola.
@@ -166,6 +313,7 @@
     window.addEventListener("pageshow", revisarEnvio);
     document.addEventListener("visibilitychange", function () { if (!document.hidden) revisarEnvio(); });
 
+    prepararFormulario();
     render();
   </script>
 </body>
